@@ -76,8 +76,6 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	// Initialize the world matrix
 	XMStoreFloat4x4(&_world, XMMatrixIdentity());
-	//XMStoreFloat4x4(&_world2, XMMatrixIdentity());
-	//XMStoreFloat4x4(&_world3, XMMatrixIdentity());
 
 	 // Light direction from surface (XYZ)
 	lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
@@ -811,7 +809,7 @@ void Application::Update()
 	//Grid
 	XMStoreFloat4x4(&_world5, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
 								XMMatrixTranslation(-0.7f, -1.5f, 1.85f)*
-								XMMatrixScaling(40.1f, 1.0f, 40.1f));
+								XMMatrixScaling(4.0f, 4.0f, 4.0f));
 							
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -829,6 +827,8 @@ void Application::Update()
 		wfdesc.CullMode = D3D11_CULL_NONE;
 		_pImmediateContext->RSSetState(_solidState);
 	}
+
+	_camera.Update();
 }
 
 void Application::Draw()
@@ -889,8 +889,10 @@ void Application::Draw()
 	world = XMLoadFloat4x4(&_world5);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(900, 0, 0);
-	//objMeshData = OBJLoader::Draw("sphere.obj", _pd3dDevice, false);
+
+	_pImmediateContext->DrawIndexed(36, 0, 0);
+	
+	//objMeshData = OBJLoader::Load("sphere.obj", _pd3dDevice, false);
 
 	 
 	// Set the blend state for transparent objects

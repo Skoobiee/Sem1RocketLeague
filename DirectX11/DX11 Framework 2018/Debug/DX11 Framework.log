@@ -1,8 +1,5 @@
 ﻿  Application.cpp
-e:\directx11\directx11\directx11 camera\dx11 framework 2018\application.cpp(50): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-e:\directx11\directx11\directx11 camera\dx11 framework 2018\application.cpp(843): warning C4238: nonstandard extension used: class rvalue used as lvalue
-e:\directx11\directx11\directx11 camera\dx11 framework 2018\application.cpp(844): warning C4238: nonstandard extension used: class rvalue used as lvalue
-  Camera.cpp
-  DX11 Framework.cpp
-  Generating Code...
-  DX11 Framework.vcxproj -> E:\DirectX11\DirectX11\DirectX11 Camera\DX11 Framework 2018\Debug\DX11 Framework.exe
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(50): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(843): warning C4238: nonstandard extension used: class rvalue used as lvalue
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(844): warning C4238: nonstandard extension used: class rvalue used as lvalue
+  DX11 Framework.vcxproj -> D:\Sem1RocketLeague\DirectX11\DX11 Framework 2018\Debug\DX11 Framework.exe

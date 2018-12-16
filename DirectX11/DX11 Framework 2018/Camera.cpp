@@ -19,7 +19,7 @@ Camera::Camera()
 
 	//eyePosW = XMFLOAT3(3.0f, 0.0f, -3.0f);
 
-
+	
 
 }
 
@@ -28,15 +28,23 @@ Camera::~Camera()
 
 }
 
-void Camera::Update()
+XMFLOAT4X4 Camera::Update()
 {
 	if (GetAsyncKeyState('1')) //static forward
 	{
-		
+		XMVECTOR Eye = XMVectorSet(2.0f, 1.0f, -2.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
 	else if (GetAsyncKeyState('2')) //static top down
 	{
-		
+		XMVECTOR Eye = XMVectorSet(0.0f, 8.0f, -5.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
 	else if (GetAsyncKeyState('3')) //fixed to car
 	{
@@ -46,6 +54,8 @@ void Camera::Update()
 	{
 
 	}
+
+	return _projection;
 }
 
 XMFLOAT4X4 Camera::GetView()

@@ -16,6 +16,8 @@ public:
 	XMFLOAT4X4 GetView();
 	XMFLOAT4X4 GetProjection();
 
+	XMFLOAT4X4 Update();
+
 private:
 
 	XMFLOAT4X4              _view;
@@ -23,7 +25,7 @@ private:
 	UINT _WindowHeight;
 	UINT _WindowWidth;
 
-	void Update();
+	
 
 };
 
