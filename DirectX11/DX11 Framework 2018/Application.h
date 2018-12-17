@@ -117,7 +117,8 @@ private:
 	ID3D11ShaderResourceView * _pTextureRV = nullptr;
 	ID3D11SamplerState * _pSamplerLinear = nullptr;
 
-	
+	ID3D11ShaderResourceView * _pTextureRV2 = nullptr;
+	ID3D11SamplerState * _pSamplerLinear2 = nullptr;
 
 public:
 	Application();

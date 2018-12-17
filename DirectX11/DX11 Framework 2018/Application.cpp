@@ -110,6 +110,23 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV); //binds to pipeline
 	_pImmediateContext->PSSetSamplers(0, 1, &_pSamplerLinear);
 
+	// Create the sample state
+	D3D11_SAMPLER_DESC sampDesc2;
+	ZeroMemory(&sampDesc2, sizeof(sampDesc2));
+	sampDesc2.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc2.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc2.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc2.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc2.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc2.MinLOD = 0;
+	sampDesc2.MaxLOD = D3D11_FLOAT32_MAX;
+
+	_pd3dDevice->CreateSamplerState(&sampDesc2, &_pSamplerLinear2);
+
+	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureRV2); //L"texture.dds"
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
+	_pImmediateContext->PSSetSamplers(0, 1, &_pSamplerLinear2);
+
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 
@@ -320,43 +337,56 @@ HRESULT Application::InitGridVertexBuffer()
 
 	SimpleVertex vertices[] =
 	{
-		
-	{ XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-	{ XMFLOAT3(2.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
-	{ XMFLOAT3(3.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
-	{ XMFLOAT3(4.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
 
-	{ XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
-	{ XMFLOAT3(1.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-	{ XMFLOAT3(2.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(3.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
-	{ XMFLOAT3(4.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
 
-	{ XMFLOAT3(0.0f, 0.0f, -2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(1.0f, 0.0f, -2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(2.0f, 0.0f, -2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
-	{ XMFLOAT3(3.0f, 0.0f, -2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
-	{ XMFLOAT3(4.0f, 0.0f, -2.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
 
-	{ XMFLOAT3(0.0f, 0.0f, -3.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(1.0f, 0.0f, -3.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
-	{ XMFLOAT3(2.0f, 0.0f, -3.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
-	{ XMFLOAT3(3.0f, 0.0f, -3.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-	{ XMFLOAT3(4.0f, 0.0f, -3.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(0.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
 
-	{ XMFLOAT3(0.0f, 0.0f, -4.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
-	{ XMFLOAT3(1.0f, 0.0f, -4.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
-	{ XMFLOAT3(2.0f, 0.0f, -4.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-	{ XMFLOAT3(3.0f, 0.0f, -4.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
-	{ XMFLOAT3(4.0f, 0.0f, -4.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), }
+		{ XMFLOAT3(1.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
 
+		{ XMFLOAT3(2.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
+
+		{ XMFLOAT3(0.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(0.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
+
+		{ XMFLOAT3(1.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), },
+
+		{ XMFLOAT3(2.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, -2.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(3.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(2.0f, 0.0f, -3.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), }
 	};
 
 	D3D11_BUFFER_DESC bd; //copy the vertices over to the graphics card
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 25;
+	bd.ByteWidth = sizeof(SimpleVertex) * 36;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -459,60 +489,39 @@ HRESULT Application::InitGridIndexBuffer()
 
 	WORD indices[] =
 	{
-		1, 2, 6,
-		2, 7, 6,
+		0,1,2,
+		0,2,3,
 
-		2, 3, 7,
-		3, 8, 7,
+		4,5,6,
+		4,6,7,
 
-		3, 4, 8,
-		4, 9, 8,
+		8,9,10,
+		8,10,11,
 
-		4, 5, 9,
-		5, 10, 9,
+		12,13,14,
+		12,14,15,
 
-		6, 7, 11,
-		7, 12, 11,
+		16,17,18,
+		16,18,19,
 
-		7, 8, 12,
-		8, 13, 12,
+		20,21,22,
+		20,22,23,
 
-		8, 9, 13,
-		9, 14, 13,
+		24,25,26,
+		24,26,27,
 
-		9, 10, 14,
-		10, 15, 14,
+		28,29,30,
+		28,30,31,
 
-		11, 12, 16,
-		12, 17, 16,
-
-		12, 13, 17, 
-		13, 18, 17,
-
-		13, 14, 18,
-		14, 19, 18,
-
-		14, 15, 19,
-		15, 20, 19,
-
-		16, 17, 21,
-		17, 22, 21,
-
-		17, 18, 22,
-		18, 23, 22,
-
-		18, 19, 23,
-		19, 24, 23,
-
-		19, 20, 24,
-		20, 25, 24
+		32,33,34,
+		32,34,35
 	};
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 96;    //if we change number of indicies, have to change this value to match 
+	bd.ByteWidth = sizeof(WORD) * 54;    //if we change number of indicies, have to change this value to match 
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -802,8 +811,8 @@ void Application::Update()
 								XMMatrixRotationZ(t * 2.0f));
 
 	//Grid
-	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
-								XMMatrixTranslation(-0.7f, -2.5f, 1.85f)* 
+	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+								XMMatrixTranslation(-0.7f, -3.5f, 1.0f)* 
 								XMMatrixScaling(40.1f, 1.0f, 40.1f));
 
 	//Grid
@@ -924,7 +933,7 @@ void Application::Draw()
 	world = XMLoadFloat4x4(&_world4);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(96, 0, 0);
+	_pImmediateContext->DrawIndexed(54, 0, 0);
 
     // Present our back buffer to our front buffer
     _pSwapChain->Present(0, 0);
