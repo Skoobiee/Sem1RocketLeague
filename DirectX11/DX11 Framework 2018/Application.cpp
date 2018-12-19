@@ -124,7 +124,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_pd3dDevice->CreateSamplerState(&sampDesc2, &_pSamplerLinear2);
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureRV2); //L"texture.dds"
-	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
+	//_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
 	_pImmediateContext->PSSetSamplers(0, 1, &_pSamplerLinear2);
 
 	D3D11_BLEND_DESC blendDesc;
@@ -923,7 +923,7 @@ void Application::Draw()
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); 
 	_pImmediateContext->DrawIndexed(18, 0, 0); 
 
-	
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
 
 	//Renders a grid
 	_pImmediateContext->IASetVertexBuffers(0, 1, &_pGridVertexBuffer, &stride, &offset);
