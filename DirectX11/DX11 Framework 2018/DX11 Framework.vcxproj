@@ -381,6 +381,7 @@
     <ClCompile Include="DX11 Framework.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DX11 Framework.fx" />
@@ -391,6 +392,7 @@
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="OBJLoader.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Structures.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
