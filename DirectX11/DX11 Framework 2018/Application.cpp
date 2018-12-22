@@ -107,25 +107,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_pd3dDevice->CreateSamplerState(&sampDesc, &_pSamplerLinear);
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTextureRV); //L"texture.dds"
-	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV); //binds to pipeline
 	_pImmediateContext->PSSetSamplers(0, 1, &_pSamplerLinear);
 
-	// Create the sample state
-	D3D11_SAMPLER_DESC sampDesc2;
-	ZeroMemory(&sampDesc2, sizeof(sampDesc2));
-	sampDesc2.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	sampDesc2.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc2.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc2.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampDesc2.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	sampDesc2.MinLOD = 0;
-	sampDesc2.MaxLOD = D3D11_FLOAT32_MAX;
+	CreateDDSTextureFromFile(_pd3dDevice, L"Grass.dds", 0, &_pTextureGrass);
 
-	_pd3dDevice->CreateSamplerState(&sampDesc2, &_pSamplerLinear2);
-
-	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureRV2); //L"texture.dds"
-	//_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
-	_pImmediateContext->PSSetSamplers(0, 1, &_pSamplerLinear2);
+	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureBlue);
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -887,6 +873,8 @@ void Application::Draw()
 	// Set index buffer
 	_pImmediateContext->IASetIndexBuffer(_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV); //binds to pipeline
+
     // Renders a cube
 	_pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
 	_pImmediateContext->VSSetConstantBuffers(0, 1, &_pConstantBuffer);
@@ -912,6 +900,7 @@ void Application::Draw()
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); //changes whats in the constant buffer
 	_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES 
 
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureBlue); //binds to pipeline
 
 	 //Renders a pyramid
 	_pImmediateContext->IASetVertexBuffers(0, 1, &_pPyramidVertexBuffer, &stride, &offset);
@@ -923,7 +912,7 @@ void Application::Draw()
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); 
 	_pImmediateContext->DrawIndexed(18, 0, 0); 
 
-	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureRV2); //binds to pipeline
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureGrass); //binds to pipeline
 
 	//Renders a grid
 	_pImmediateContext->IASetVertexBuffers(0, 1, &_pGridVertexBuffer, &stride, &offset);
