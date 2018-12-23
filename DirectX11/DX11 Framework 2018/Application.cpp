@@ -842,29 +842,41 @@ void Application::Update()
 		timeOfDay = 0;
 	}
 
-	if (timeOfDay >= 100)
+	if (timeOfDay >= 800 && timeOfDay <= 1399 || timeOfNight >= 1600 && timeOfNight <= 2399) //200, 399,  400, 599
 	{
-		daytime = false;
-
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
-		diffuseMaterial = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+		diffuseMaterial = XMFLOAT4(0.7f, 0.7f, 1.0f, 1.0f);
 		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
+	}
 
-		//specularMtrl = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-		//specularLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-		//specularPower = 10.0f;
+	if (timeOfDay >= 1600 && timeOfDay <= 2399 || timeOfNight >= 800 && timeOfNight <= 1399) //400, 599,  200, 399
+	{
+		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
+		diffuseMaterial = XMFLOAT4(0.4f, 0.4f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
 
-		//timeOfNight++;
+		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
+		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
+	}
+
+	if (timeOfDay >= 2400) //600
+	{
+		daytime = false;
+
+		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
+		diffuseMaterial = XMFLOAT4(0.1f, 0.1f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+
+		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
+		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 	
-	if (timeOfNight >= 100)
+	if (timeOfNight >= 2400) //600
 	{
 		daytime = true;
-
-		//timeOfDay = 0;
 
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -872,12 +884,6 @@ void Application::Update()
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
-
-		//specularMtrl = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-		//specularLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-		//specularPower = 10.0f;
-
-		//timeOfDay++;
 	}
 }
 
