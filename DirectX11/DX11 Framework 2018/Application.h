@@ -13,14 +13,6 @@
 
 using namespace DirectX;
 
-//struct SimpleVertex
-//{
-//    XMFLOAT3 Pos;
-//   // XMFLOAT4 Color; //matches the input layout, change input layout when this is changed
-//	XMFLOAT3 normal;
-//	XMFLOAT2 TexC;
-//};
-
 struct ConstantBuffer //has to match in other constant buffer in .fx
 {
 	XMMATRIX mWorld;
@@ -119,6 +111,10 @@ private:
 
 	ID3D11ShaderResourceView * _pTextureGrass = nullptr;
 	ID3D11ShaderResourceView * _pTextureBlue = nullptr;
+
+	int timeOfDay;
+	int timeOfNight;
+	bool daytime;
 
 public:
 	Application();

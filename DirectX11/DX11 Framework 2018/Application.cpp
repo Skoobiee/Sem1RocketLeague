@@ -140,6 +140,10 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	objMeshData = OBJLoader::Load("sphere.obj", _pd3dDevice, false);
 
+	timeOfDay = 0;
+	timeOfNight = 0;
+	daytime = true;
+
 	return S_OK;
 }
 
@@ -824,6 +828,57 @@ void Application::Update()
 	}
 
 	_camera.Update();
+
+	//timeOfDay++;
+
+	if (daytime)
+	{
+		timeOfDay++;
+		timeOfNight = 0;
+	}
+	else if (!daytime)
+	{
+		timeOfNight++;
+		timeOfDay = 0;
+	}
+
+	if (timeOfDay >= 100)
+	{
+		daytime = false;
+
+		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
+		diffuseMaterial = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+
+		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
+		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
+
+		//specularMtrl = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+		//specularLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+		//specularPower = 10.0f;
+
+		//timeOfNight++;
+	}
+	
+	if (timeOfNight >= 100)
+	{
+		daytime = true;
+
+		//timeOfDay = 0;
+
+		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
+		diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+
+		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
+		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
+
+		//specularMtrl = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+		//specularLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+		//specularPower = 10.0f;
+
+		//timeOfDay++;
+	}
 }
 
 void Application::Draw()

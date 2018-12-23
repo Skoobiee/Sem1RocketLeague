@@ -18,6 +18,7 @@
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Daytime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Daytime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
