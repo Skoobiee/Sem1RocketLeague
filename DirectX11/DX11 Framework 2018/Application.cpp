@@ -827,9 +827,32 @@ void Application::Update()
 		_pImmediateContext->RSSetState(_solidState);
 	}
 
-	_camera.Update();
+	if (GetAsyncKeyState('W') || ('w'))
+	{
+		
+	}
+	
+	if (GetAsyncKeyState('S') || ('s'))
+	{
+		
+	}
 
-	//timeOfDay++;
+	if (GetAsyncKeyState('A') || ('a'))
+	{
+		
+	}
+	
+	if (GetAsyncKeyState('D') || ('d'))
+	{
+		
+	}
+
+	if (GetAsyncKeyState(VK_SHIFT))
+	{
+
+	}
+
+	_camera.Update();
 
 	if (daytime)
 	{
@@ -842,7 +865,7 @@ void Application::Update()
 		timeOfDay = 0;
 	}
 
-	if (timeOfDay >= 800 && timeOfDay <= 1399 || timeOfNight >= 1600 && timeOfNight <= 2399) //200, 399,  400, 599
+	if (timeOfDay >= 1600 && timeOfDay <= 2799 || timeOfNight >= 3200 && timeOfNight <= 4799) //800, 1399,  1600, 2399
 	{
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.7f, 0.7f, 1.0f, 1.0f);
@@ -852,7 +875,7 @@ void Application::Update()
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 
-	if (timeOfDay >= 1600 && timeOfDay <= 2399 || timeOfNight >= 800 && timeOfNight <= 1399) //400, 599,  200, 399
+	if (timeOfDay >= 3200 && timeOfDay <= 4799 || timeOfNight >= 1600 && timeOfNight <= 2799) //1600, 2399,   800, 1399
 	{
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.4f, 0.4f, 1.0f, 1.0f);
@@ -862,7 +885,7 @@ void Application::Update()
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 
-	if (timeOfDay >= 2400) //600
+	if (timeOfDay >= 4800) //2400
 	{
 		daytime = false;
 
@@ -874,7 +897,7 @@ void Application::Update()
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 	
-	if (timeOfNight >= 2400) //600
+	if (timeOfNight >= 4800) //2400
 	{
 		daytime = true;
 
