@@ -1,5 +1,5 @@
 ﻿  Application.cpp
 d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(50): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(897): warning C4238: nonstandard extension used: class rvalue used as lvalue
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(898): warning C4238: nonstandard extension used: class rvalue used as lvalue
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(922): warning C4238: nonstandard extension used: class rvalue used as lvalue
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(923): warning C4238: nonstandard extension used: class rvalue used as lvalue
   DX11 Framework.vcxproj -> D:\Sem1RocketLeague\DirectX11\DX11 Framework 2018\Debug\DX11 Framework.exe
