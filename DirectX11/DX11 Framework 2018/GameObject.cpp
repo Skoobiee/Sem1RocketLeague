@@ -38,7 +38,7 @@ void GameObject::UpdateWorld()
 	XMMATRIX scale = XMLoadFloat4x4(&_scale);
 	XMMATRIX rotate = XMLoadFloat4x4(&_rotate);
 	XMMATRIX translate = XMLoadFloat4x4(&_translate);
-
+	
 	XMStoreFloat4x4(&_world, scale * rotate * translate);
 }
 

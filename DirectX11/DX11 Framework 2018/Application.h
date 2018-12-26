@@ -49,7 +49,7 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
-	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5; //a world for each object
+	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar; //a world for each object
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
 
@@ -58,6 +58,9 @@ private:
 
 	ID3D11Buffer*           _pGridVertexBuffer;
 	ID3D11Buffer*           _pGridIndexBuffer;
+
+	ID3D11Buffer*           _pCarVertexBuffer;
+	ID3D11Buffer*           _pCarIndexBuffer;
 
 	XMFLOAT3 lightDirection;
 	XMFLOAT4 diffuseMaterial;
@@ -96,6 +99,9 @@ private:
 
 	HRESULT InitGridVertexBuffer();
 	HRESULT InitGridIndexBuffer();
+
+	HRESULT InitCarVertexBuffer();
+	HRESULT InitCarIndexBuffer();
 
 	UINT _WindowHeight;
 	UINT _WindowWidth;
