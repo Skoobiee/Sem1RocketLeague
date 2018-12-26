@@ -403,27 +403,36 @@ HRESULT Application::InitCarVertexBuffer()
 
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), }, //left
-		{ XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), }, //front
-		{ XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), }, //right
-		{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), }, //behind
-		{ XMFLOAT3(0.5f, 1.0f, 0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), }, //top
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f),   XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f),  XMFLOAT2(1.0f, 1.0f), },
 
-		{ XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), }, //left
-		{ XMFLOAT3(0.5f, 1.0f, 0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), }, //top
-		{ XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), }, //front
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),	 XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
 
-		{ XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), }, //front
-		{ XMFLOAT3(0.5f, 1.0f, 0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), }, //top
-		{ XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), }, //right
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f),  XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f),  XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 1.0f), },
 
-		{ XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), }, //right
-		{ XMFLOAT3(0.5f, 1.0f, 0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), }, //top
-		{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), }, //behind
 
-		{ XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), }, //behind
-		{ XMFLOAT3(0.5f, 1.0f, 0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f), }, //top
-		{ XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), }, //left
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),   XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
+
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),   XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),	 XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
+
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f), },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f) }
 	};
 
 	//objMeshData = OBJLoader::Load("car.obj", _pd3dDevice, false);
@@ -591,39 +600,30 @@ HRESULT Application::InitCarIndexBuffer()
 
 	WORD indices[] =
 	{
-		0,1,2,
-		0,2,3,
+		0,1,3,
+		0,3,2,
 
-		4,5,6,
-		4,6,7,
+		4,5,7,
+		4,7,6,
 
-		8,9,10,
-		8,10,11,
+		8,9,11,
+		8,11,10,
 
-		12,13,14,
-		12,14,15,
+		12,13,15,
+		12,15,14,
 
-		16,17,18,
-		16,18,19,
+		16,17,19,
+		16,19,18,
 
-		20,21,22,
-		20,22,23,
-
-		24,25,26,
-		24,26,27,
-
-		28,29,30,
-		28,30,31,
-
-		32,33,34,
-		32,34,35
+		20,21,23,
+		20,23,22
 	};
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 54;    //if we change number of indicies, have to change this value to match 
+	bd.ByteWidth = sizeof(WORD) * 36;    //if we change number of indicies, have to change this value to match 
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -929,8 +929,8 @@ void Application::Update()
 
 	//Car
 	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
-								XMMatrixTranslation(-0.7f, -1.5f, 1.85f)*
-								XMMatrixScaling(4.0f, 4.0f, 4.0f));
+								XMMatrixTranslation(5.0f, -3.0f, -1.0f
+								));
 							
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -1099,8 +1099,13 @@ void Application::Draw()
 	world = XMLoadFloat4x4(&_worldCar);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(18, 0, 0);
+	_pImmediateContext->DrawIndexed(36, 0, 0);
 
+	//Renders second cube
+	world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
+	cb.mWorld = XMMatrixTranspose(world);//passes it into the constant buffer
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); //changes whats in the constant buffer
+	_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES 
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureGrass); //binds to pipeline
 
@@ -1117,11 +1122,7 @@ void Application::Draw()
 	// Set the blend state for transparent objects
 	_pImmediateContext->OMSetBlendState(Transparency, blendFactor, 0xffffffff);
 
-	//Renders second cube
-	world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
-	cb.mWorld = XMMatrixTranspose(world);//passes it into the constant buffer
-	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); //changes whats in the constant buffer
-	_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES 
+	
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureBlue); //binds to pipeline
 
