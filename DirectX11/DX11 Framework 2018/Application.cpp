@@ -951,6 +951,10 @@ void Application::Update()
 
 	if (GetAsyncKeyState('W') || ('w'))
 	{
+		//XMLoadFloat4x4(&_worldCar);
+		//XMMatrixTranslation(-0.7f, -1.5f, 1.85f);
+		//xPos->&_worldCar += (1.0f * 2);
+		XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
 		
 	}
 	
