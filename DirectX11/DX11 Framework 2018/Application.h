@@ -117,7 +117,8 @@ private:
 
 	ID3D11ShaderResourceView * _pTextureGrass = nullptr;
 	ID3D11ShaderResourceView * _pTextureBlue = nullptr;
-
+	ID3D11ShaderResourceView * _pTextureOther = nullptr;
+	
 	int timeOfDay;
 	int timeOfNight;
 	bool daytime;

@@ -115,6 +115,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureBlue);
 
+	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_SPEC.dds", 0, &_pTextureOther);
+
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 
@@ -143,7 +145,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//objMeshData = OBJLoader::Load("sphere.obj", _pd3dDevice, false);
 
 	objMeshData = OBJLoader::Load("car.obj", _pd3dDevice, false);
-	//objMeshData = OBJLoader::Load("car.obj", _pd3dDevice);
+	
 
 	timeOfDay = 0;
 	timeOfNight = 0;
@@ -400,58 +402,19 @@ HRESULT Application::InitGridVertexBuffer()
 HRESULT Application::InitCarVertexBuffer()
 {
 	HRESULT hr;
-
-	SimpleVertex vertices[] =
-	{
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f),   XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f),  XMFLOAT2(1.0f, 1.0f), },
-
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),	 XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
-
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f),  XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f),  XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 1.0f), },
-
-
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),   XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
-
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),   XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),	 XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f), },
-
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(1.0f, 0.0f), },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(0.0f, 1.0f), },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f),  XMFLOAT2(1.0f, 1.0f) }
-	};
-
-	//objMeshData = OBJLoader::Load("car.obj", _pd3dDevice, false);
-	//vertices = OBJLoader::FindSimilarVertex(SimpleVertex, SimpleVertex, false);
 	
-
-
-	D3D11_BUFFER_DESC bd; 
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 36;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(SimpleVertex) * 300;
+	MeshData.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
+	//InitData.pSysMem = vertices;
 
-	hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pCarVertexBuffer);
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pCarVertexBuffer);
 
 	if (FAILED(hr))
 		return hr;
@@ -597,40 +560,18 @@ HRESULT Application::InitCarIndexBuffer()
 {
 	HRESULT hr;
 
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
 
-	WORD indices[] =
-	{
-		0,1,3,
-		0,3,2,
-
-		4,5,7,
-		4,7,6,
-
-		8,9,11,
-		8,11,10,
-
-		12,13,15,
-		12,15,14,
-
-		16,17,19,
-		16,19,18,
-
-		20,21,23,
-		20,23,22
-	};
-
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 36;    //if we change number of indicies, have to change this value to match 
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(WORD) * 300;  
+	MeshData.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = indices;
-	hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pCarIndexBuffer);
+	//InitData.pSysMem = indices;
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pCarIndexBuffer);
 
 	if (FAILED(hr))
 		return hr;
@@ -928,9 +869,9 @@ void Application::Update()
 								XMMatrixScaling(4.0f, 4.0f, 4.0f));
 
 	//Car
-	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
-								XMMatrixTranslation(5.0f, -3.0f, -1.0f
-								));
+	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+								XMMatrixTranslation(5.0f, -700.0f, -1.0f) *
+								XMMatrixScaling(0.005f, 0.005f, 0.005f));
 							
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -954,7 +895,7 @@ void Application::Update()
 		//XMLoadFloat4x4(&_worldCar);
 		//XMMatrixTranslation(-0.7f, -1.5f, 1.85f);
 		//xPos->&_worldCar += (1.0f * 2);
-		XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
+		//XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
 		
 	}
 	
@@ -1098,12 +1039,20 @@ void Application::Draw()
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 	_pImmediateContext->DrawIndexed(36, 0, 0);
 	
-	//objMeshData = OBJLoader::Load("sphere.obj", _pd3dDevice, false);
-	//Renders a car
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureOther); 
+
+	//Renders the Car
 	world = XMLoadFloat4x4(&_worldCar);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	unsigned int stride2 = objMeshData.VBStride;
+	unsigned int offset2 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshData.VertexBuffer, &stride2, &offset2);
+	_pImmediateContext->IASetIndexBuffer(objMeshData.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshData.IndexCount, 0, 0);
+
 
 	//Renders second cube
 	world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
@@ -1125,8 +1074,6 @@ void Application::Draw()
 
 	// Set the blend state for transparent objects
 	_pImmediateContext->OMSetBlendState(Transparency, blendFactor, 0xffffffff);
-
-	
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureBlue); //binds to pipeline
 
