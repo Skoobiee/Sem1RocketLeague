@@ -49,7 +49,7 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
-	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar; //a world for each object
+	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar, _worldPowerup, _worldPowerup2, _worldPowerup3; //a world for each object
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
 
@@ -61,6 +61,9 @@ private:
 
 	ID3D11Buffer*           _pCarVertexBuffer;
 	ID3D11Buffer*           _pCarIndexBuffer;
+
+	ID3D11Buffer*           _pPowerupVertexBuffer;
+	ID3D11Buffer*           _pPowerupIndexBuffer;
 
 	XMFLOAT3 lightDirection;
 	XMFLOAT4 diffuseMaterial;
@@ -82,7 +85,7 @@ private:
 	XMFLOAT3 yPos;
 
 	MeshData objMeshData;
-
+	MeshData objMeshDataSphere;
 
 private:
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
@@ -103,6 +106,9 @@ private:
 	HRESULT InitCarVertexBuffer();
 	HRESULT InitCarIndexBuffer();
 
+	HRESULT InitPowerupVertexBuffer();
+	HRESULT InitPowerupIndexBuffer();
+
 	UINT _WindowHeight;
 	UINT _WindowWidth;
 
@@ -117,8 +123,9 @@ private:
 
 	ID3D11ShaderResourceView * _pTextureGrass = nullptr;
 	ID3D11ShaderResourceView * _pTextureBlue = nullptr;
-	ID3D11ShaderResourceView * _pTextureOther = nullptr;
-	
+	ID3D11ShaderResourceView * _pTextureCar = nullptr;
+	ID3D11ShaderResourceView * _pTexturePowerup = nullptr;
+
 	int timeOfDay;
 	int timeOfNight;
 	bool daytime;

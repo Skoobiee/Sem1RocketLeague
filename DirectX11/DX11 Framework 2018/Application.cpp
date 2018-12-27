@@ -47,6 +47,8 @@ Application::Application()
 	_pGridIndexBuffer = nullptr;
 	_pCarVertexBuffer = nullptr;
 	_pCarIndexBuffer = nullptr;
+	_pPowerupVertexBuffer = nullptr;
+	_pPowerupIndexBuffer = nullptr;
 	_pConstantBuffer = nullptr;
 
 	srand(time(NULL));
@@ -84,7 +86,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	// Diffuse material properties (RGBA)
 	diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	// Diffuse light colour (RGBA)
-	diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+	diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 	ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
@@ -115,7 +117,9 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_NRM.dds", 0, &_pTextureBlue);
 
-	CreateDDSTextureFromFile(_pd3dDevice, L"Crate_SPEC.dds", 0, &_pTextureOther);
+	CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
+
+	CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -142,10 +146,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//xPos = GET_X_LPARAM(lParam);
 	//yPos = GET_Y_LPARAM(lParam);
 
-	//objMeshData = OBJLoader::Load("sphere.obj", _pd3dDevice, false);
-
 	objMeshData = OBJLoader::Load("car.obj", _pd3dDevice, false);
-	
+	objMeshDataSphere = OBJLoader::Load("sphere.obj", _pd3dDevice);
 
 	timeOfDay = 0;
 	timeOfNight = 0;
@@ -422,6 +424,29 @@ HRESULT Application::InitCarVertexBuffer()
 	return S_OK;
 }
 
+HRESULT Application::InitPowerupVertexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(SimpleVertex) * 300;
+	MeshData.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = vertices;
+
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pPowerupVertexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
 HRESULT Application::InitIndexBuffer()
 {
 	HRESULT hr;
@@ -572,6 +597,29 @@ HRESULT Application::InitCarIndexBuffer()
 	ZeroMemory(&InitData, sizeof(InitData));
 	//InitData.pSysMem = indices;
 	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pCarIndexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT Application::InitPowerupIndexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(WORD) * 300;
+	MeshData.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = indices;
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pPowerupIndexBuffer);
 
 	if (FAILED(hr))
 		return hr;
@@ -749,11 +797,13 @@ HRESULT Application::InitDevice()
 	InitPyramidVertexBuffer();
 	InitGridVertexBuffer();
 	InitCarVertexBuffer();
+	InitPowerupVertexBuffer();
 
 	InitIndexBuffer();
 	InitPyramidIndexBuffer();
 	InitGridIndexBuffer();
 	InitCarIndexBuffer();
+	InitPowerupIndexBuffer();
 
     // Set primitive topology
     _pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -810,6 +860,9 @@ void Application::Cleanup()
 	if (_pCarVertexBuffer) _pCarVertexBuffer->Release();
 	if (_pCarIndexBuffer) _pCarIndexBuffer->Release();
 
+	if (_pPowerupVertexBuffer) _pPowerupVertexBuffer->Release();
+	if (_pPowerupIndexBuffer) _pPowerupIndexBuffer->Release();
+
     if (_pVertexLayout) _pVertexLayout->Release();
     if (_pVertexShader) _pVertexShader->Release();
     if (_pPixelShader) _pPixelShader->Release();
@@ -842,7 +895,8 @@ void Application::Update()
 	}
 
 	// Animate the cube
-	XMStoreFloat4x4(&_world, XMMatrixRotationZ(t)); //t value increases - makes it spin round
+	XMStoreFloat4x4(&_world, XMMatrixRotationZ(t) *
+								XMMatrixTranslation(-2.0f, 0.0f, 5.0f)); //t value increases - makes it spin round
 
 	XMStoreFloat4x4(&_world2, XMMatrixRotationZ(t) * 
 								XMMatrixScaling(0.5f, 0.5f, 0.5f)* 
@@ -853,9 +907,9 @@ void Application::Update()
 	XMStoreFloat4x4(&_world3, XMMatrixRotationZ(t) *
 								XMMatrixScaling(0.45f, 0.45f, 0.45f) *
 								XMMatrixRotationZ(t * 2.0f) * //can take a translation and rotation from previous object to rotate around it
-								XMMatrixTranslation(1.0f, 0.0f, 0.0f) *
+								XMMatrixTranslation(-2.0f, 0.0f, 5.0f) *
 								XMMatrixRotationZ(t * 5.0f) *
-								XMMatrixTranslation(2.0f, 0.0f, 0.0f) *
+								XMMatrixTranslation(-2.0f, 0.0f, 5.0f) *
 								XMMatrixRotationZ(t * 2.0f));
 
 	//Grid
@@ -863,15 +917,27 @@ void Application::Update()
 								XMMatrixTranslation(-0.7f, -3.5f, 1.0f)* 
 								XMMatrixScaling(40.1f, 1.0f, 40.1f));
 
-	//Grid
-	XMStoreFloat4x4(&_world5, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
+	/*XMStoreFloat4x4(&_world5, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
 								XMMatrixTranslation(-0.7f, -1.5f, 1.85f)*
-								XMMatrixScaling(4.0f, 4.0f, 4.0f));
+								XMMatrixScaling(4.0f, 4.0f, 4.0f));*/
 
 	//Car
 	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
 								XMMatrixTranslation(5.0f, -700.0f, -1.0f) *
 								XMMatrixScaling(0.005f, 0.005f, 0.005f));
+
+	//Powerup
+	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+								XMMatrixTranslation(15.0f, -5.0f, -1.0f) *
+								XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+									XMMatrixTranslation(25.0f, -5.0f, 20.0f) *
+									XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+									XMMatrixTranslation(50.0f, -5.0f, 20.0f) *
+									XMMatrixScaling(0.1f, 0.1f, 0.1f));
 							
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -896,6 +962,8 @@ void Application::Update()
 		//XMMatrixTranslation(-0.7f, -1.5f, 1.85f);
 		//xPos->&_worldCar += (1.0f * 2);
 		//XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
+
+		XMStoreFloat4x4(&_worldCar, XMMatrixTranslation(5.0f, -700.0f, -1.0f));
 		
 	}
 	
@@ -936,7 +1004,7 @@ void Application::Update()
 	{
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.7f, 0.7f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
@@ -946,7 +1014,7 @@ void Application::Update()
 	{
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.4f, 0.4f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
@@ -958,7 +1026,7 @@ void Application::Update()
 
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.1f, 0.1f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
@@ -970,7 +1038,7 @@ void Application::Update()
 
 		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
@@ -1034,12 +1102,12 @@ void Application::Draw()
 	_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES   
 
 	
-	world = XMLoadFloat4x4(&_world5);
+	/*world = XMLoadFloat4x4(&_world5);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(36, 0, 0);
+	_pImmediateContext->DrawIndexed(36, 0, 0);*/
 	
-	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureOther); 
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureCar); 
 
 	//Renders the Car
 	world = XMLoadFloat4x4(&_worldCar);
@@ -1053,12 +1121,42 @@ void Application::Draw()
 	_pImmediateContext->IASetIndexBuffer(objMeshData.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshData.IndexCount, 0, 0);
 
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTexturePowerup); 
 
-	//Renders second cube
-	world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
-	cb.mWorld = XMMatrixTranspose(world);//passes it into the constant buffer
-	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); //changes whats in the constant buffer
-	_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES 
+	//Renders the Powerups
+	world = XMLoadFloat4x4(&_worldPowerup);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	unsigned int stride3 = objMeshDataSphere.VBStride;
+	unsigned int offset3 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataSphere.VertexBuffer, &stride3, &offset3);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldPowerup2);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataSphere.VertexBuffer, &stride3, &offset3);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldPowerup3);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataSphere.VertexBuffer, &stride3, &offset3);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
+
+
+	////Renders second cube
+	//world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
+	//cb.mWorld = XMMatrixTranspose(world);//passes it into the constant buffer
+	//_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); //changes whats in the constant buffer
+	//_pImmediateContext->DrawIndexed(36, 0, 0); //CHANGE NUMBER OF INDICIES 
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureGrass); //binds to pipeline
 
