@@ -153,6 +153,32 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	timeOfNight = 0;
 	daytime = true;
 
+	carMoved = false;
+	carSpeed = 100.0f;
+
+	//Car
+	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+		XMMatrixTranslation(5.0f, -700.0f, -1.0f) *
+		XMMatrixScaling(0.005f, 0.005f, 0.005f));
+
+	//Grid
+	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+		XMMatrixTranslation(-0.7f, -3.5f, 1.0f)*
+		XMMatrixScaling(40.1f, 1.0f, 40.1f));
+
+	//Powerup
+	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+		XMMatrixTranslation(15.0f, -5.0f, -1.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+		XMMatrixTranslation(25.0f, -5.0f, 20.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+		XMMatrixTranslation(50.0f, -5.0f, 20.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
 	return S_OK;
 }
 
@@ -912,32 +938,12 @@ void Application::Update()
 								XMMatrixTranslation(-2.0f, 0.0f, 5.0f) *
 								XMMatrixRotationZ(t * 2.0f));
 
-	//Grid
-	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
-								XMMatrixTranslation(-0.7f, -3.5f, 1.0f)* 
-								XMMatrixScaling(40.1f, 1.0f, 40.1f));
+	
 
 	/*XMStoreFloat4x4(&_world5, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
 								XMMatrixTranslation(-0.7f, -1.5f, 1.85f)*
 								XMMatrixScaling(4.0f, 4.0f, 4.0f));*/
 
-	//Car
-	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-								XMMatrixTranslation(5.0f, -700.0f, -1.0f) *
-								XMMatrixScaling(0.005f, 0.005f, 0.005f));
-
-	//Powerup
-	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-								XMMatrixTranslation(15.0f, -5.0f, -1.0f) *
-								XMMatrixScaling(0.1f, 0.1f, 0.1f));
-
-	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-									XMMatrixTranslation(25.0f, -5.0f, 20.0f) *
-									XMMatrixScaling(0.1f, 0.1f, 0.1f));
-
-	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-									XMMatrixTranslation(50.0f, -5.0f, 20.0f) *
-									XMMatrixScaling(0.1f, 0.1f, 0.1f));
 							
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -958,12 +964,13 @@ void Application::Update()
 
 	if (GetAsyncKeyState('W') || ('w'))
 	{
+		WM_KEYDOWN
 		//XMLoadFloat4x4(&_worldCar);
 		//XMMatrixTranslation(-0.7f, -1.5f, 1.85f);
 		//xPos->&_worldCar += (1.0f * 2);
 		//XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
 
-		XMStoreFloat4x4(&_worldCar, XMMatrixTranslation(5.0f, -700.0f, -1.0f));
+		//XMStoreFloat4x4(&_worldCar, XMMatrixTranslation(5.0f, -700.0f, -1.0f) * carSpeed);
 		
 	}
 	

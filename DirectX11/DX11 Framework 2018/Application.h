@@ -87,7 +87,7 @@ private:
 	MeshData objMeshData;
 	MeshData objMeshDataSphere;
 
-private:
+
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
 	HRESULT InitDevice();
 	void Cleanup();
@@ -129,6 +129,9 @@ private:
 	int timeOfDay;
 	int timeOfNight;
 	bool daytime;
+
+	bool carMoved;
+	float carSpeed;
 
 public:
 	Application();
