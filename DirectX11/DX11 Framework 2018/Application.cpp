@@ -154,12 +154,14 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	daytime = true;
 
 	carMoved = false;
-	carSpeed = 100.0f;
+	carSpeed = 2.0f;
+	xPosCar = 5.0f;
+	yPosCar = -700.0f;
+	zPosCar = -1.0f;
+	xRotation = 0;
+	carIsMoving = false;
 
-	//Car
-	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-		XMMatrixTranslation(5.0f, -700.0f, -1.0f) *
-		XMMatrixScaling(0.005f, 0.005f, 0.005f));
+	boost = 100;
 
 	//Grid
 	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
@@ -962,37 +964,91 @@ void Application::Update()
 		_pImmediateContext->RSSetState(_solidState);
 	}
 
-	if (GetAsyncKeyState('W') || ('w'))
-	{
-		WM_KEYDOWN
-		//XMLoadFloat4x4(&_worldCar);
-		//XMMatrixTranslation(-0.7f, -1.5f, 1.85f);
-		//xPos->&_worldCar += (1.0f * 2);
-		//XMStoreFloat4x4(&_worldCar,	XMMatrixTranslation(1.0f, -3.0f, -1.0f));
 
-		//XMStoreFloat4x4(&_worldCar, XMMatrixTranslation(5.0f, -700.0f, -1.0f) * carSpeed);
-		
+	//if (!carIsMoving)
+	//{
+
+	if (carSpeed <= 3.0f)
+	{
+		if (GetAsyncKeyState('W'))
+		{
+			zPosCar = zPosCar + carSpeed;
+			carSpeed += 0.02f;
+			//carIsMoving = true;
+		}
+
+		if (GetAsyncKeyState('S'))
+		{
+			zPosCar = zPosCar - carSpeed;
+			carSpeed += 0.05f;
+			//carIsMoving = true;
+		}
+
+		if (GetAsyncKeyState('A'))
+		{
+			xPosCar = xPosCar - carSpeed;
+			carSpeed += 0.02f;
+			xRotation = xRotation - 0.001;
+			//carIsMoving = true;
+		}
+
+		if (GetAsyncKeyState('D'))
+		{
+			xPosCar = xPosCar + carSpeed;
+			carSpeed += 0.02f;
+			xRotation = xRotation + 0.001;
+			//carIsMoving = true;
+		}
+
+		carSpeed = 2.0f;
+		/*if (GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
+		{
+
+		}*/
 	}
+
+	if (xRotation >= 360 || xRotation <= -360)
+	{
+		xRotation = 0;
+	}
+
+
+		//If statement for when car collides with pickup
+		//destroy pickup
+		//if boost < 75, add to boost (max 100) (25 each)
+
+		
+
+		/*if (!GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
+		{
+			carSpeed = 2.0f;
+		}*/
+
+		/*else
+		{
+			carIsMoving = false;
+		}
+	/}*/
+
 	
-	if (GetAsyncKeyState('S') || ('s'))
-	{
-		
-	}
+	//if (GetAsyncKeyState(VK_SHIFT))
+	//{
+	//	if (boost <= 100 && carSpeed <= 3.0f) //pickup collides with car, add to boost
+	//	{
+	//		carSpeed = carSpeed + 0.01f;
+	//		boost = boost - 5.0f;
+	//	}
+	//	else
+	//	{
+	//		carSpeed = 2.0f;
+	//	}
+	//}
 
-	if (GetAsyncKeyState('A') || ('a'))
-	{
-		
-	}
-	
-	if (GetAsyncKeyState('D') || ('d'))
-	{
-		
-	}
-
-	if (GetAsyncKeyState(VK_SHIFT))
-	{
-
-	}
+	//Car
+	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+								XMMatrixTranslation(xPosCar, yPosCar, zPosCar) *
+								XMMatrixRotationY(xRotation) *
+								XMMatrixScaling(0.005f, 0.005f, 0.005f));
 
 	_camera.Update();
 

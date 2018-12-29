@@ -132,6 +132,13 @@ private:
 
 	bool carMoved;
 	float carSpeed;
+	float xPosCar;
+	float yPosCar;
+	float zPosCar;
+	float xRotation;
+	bool carIsMoving;
+
+	float boost;
 
 public:
 	Application();
