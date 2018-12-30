@@ -18,9 +18,13 @@ Camera::Camera()
 	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(XM_PIDIV2, _WindowWidth / (FLOAT)_WindowHeight, 0.01f, 100.0f)); //changes the near clipping and far clipping plane, increase to increase view space
 
 	//eyePosW = XMFLOAT3(3.0f, 0.0f, -3.0f);
-
+	/*xPosCar = 5.0f;
+	yPosCar = -700.0f;
+	zPosCar = -1.0f;*/
 	
-	//x3Camera = Application::xPosCar;
+	xThirdPerson = 0.0f;
+	yThirdPerson = 1.0f;
+	zThirdPerson = -6.5f;
 }
 
 Camera::~Camera()
@@ -48,16 +52,18 @@ XMFLOAT4X4 Camera::Update()
 	}
 	else if (GetAsyncKeyState('3')) //fixed to car
 	{
-
+		
 	}
 	else if (GetAsyncKeyState('4')) //third person
 	{
 		//Application::xPosCar = 1.0f;
 		//Application::GetxPosCar;
 		
-		XMVECTOR Eye = XMVectorSet(xPosCar, yPosCar + 10.0f, zPosCar, 0.0f);
-		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR Eye = XMVectorSet(xThirdPerson, yThirdPerson, zThirdPerson, 0.0f);
+		XMVECTOR At = XMVectorSet(0.0f, -1.0f, 3.0f, 0.0f);
 		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
 
 	return _projection;

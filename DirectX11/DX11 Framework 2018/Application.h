@@ -140,6 +140,10 @@ private:
 
 	float boost;
 
+	float xThirdPerson;
+	float yThirdPerson;
+	float zThirdPerson;
+
 public:
 	Application();
 	~Application();
