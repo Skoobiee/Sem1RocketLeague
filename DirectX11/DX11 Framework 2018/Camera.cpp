@@ -20,7 +20,7 @@ Camera::Camera()
 	//eyePosW = XMFLOAT3(3.0f, 0.0f, -3.0f);
 
 	
-
+	//x3Camera = Application::xPosCar;
 }
 
 Camera::~Camera()
@@ -52,7 +52,12 @@ XMFLOAT4X4 Camera::Update()
 	}
 	else if (GetAsyncKeyState('4')) //third person
 	{
-
+		//Application::xPosCar = 1.0f;
+		//Application::GetxPosCar;
+		
+		XMVECTOR Eye = XMVectorSet(xPosCar, yPosCar + 10.0f, zPosCar, 0.0f);
+		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	}
 
 	return _projection;
@@ -67,3 +72,8 @@ XMFLOAT4X4 Camera::GetProjection()
 {
 	return _projection;
 }
+
+//XMFLOAT4X4 Camera::GetThirdPersonCamera()
+//{
+//	return xPosCar; //, yPosCar, zPosCar
+//}

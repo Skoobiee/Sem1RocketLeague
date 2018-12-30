@@ -1,7 +1,9 @@
 ﻿  Application.cpp
 d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(54): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(991): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(999): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1120): warning C4238: nonstandard extension used: class rvalue used as lvalue
-d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1121): warning C4238: nonstandard extension used: class rvalue used as lvalue
-  DX11 Framework.vcxproj -> D:\Sem1RocketLeague\DirectX11\DX11 Framework 2018\Debug\DX11 Framework.exe
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(994): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1002): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1023): error C3867: 'Camera::GetxPosCar': non-standard syntax; use '&' to create a pointer to member
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1024): error C3867: 'Camera::GetyPosCar': non-standard syntax; use '&' to create a pointer to member
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1025): error C3867: 'Camera::GetzPosCar': non-standard syntax; use '&' to create a pointer to member
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1125): warning C4238: nonstandard extension used: class rvalue used as lvalue
+d:\sem1rocketleague\directx11\dx11 framework 2018\application.cpp(1126): warning C4238: nonstandard extension used: class rvalue used as lvalue

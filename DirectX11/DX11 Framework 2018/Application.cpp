@@ -161,6 +161,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	xRotation = 0;
 	carIsMoving = false;
 
+
 	boost = 100;
 
 	//Grid
@@ -183,6 +184,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	return S_OK;
 }
+
+
 
 HRESULT Application::InitShadersAndInputLayout()
 {
@@ -976,7 +979,7 @@ void Application::Update()
 			carSpeed += 0.02f;
 			//carIsMoving = true;
 		}
-
+		
 		if (GetAsyncKeyState('S'))
 		{
 			zPosCar = zPosCar - carSpeed;
@@ -1017,8 +1020,8 @@ void Application::Update()
 		//destroy pickup
 		//if boost < 75, add to boost (max 100) (25 each)
 
-		
-
+	
+	
 		/*if (!GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
 		{
 			carSpeed = 2.0f;
@@ -1047,7 +1050,7 @@ void Application::Update()
 	//Car
 	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
 								XMMatrixTranslation(xPosCar, yPosCar, zPosCar) *
-								XMMatrixRotationY(xRotation) *
+							//	XMMatrixRotationY(xRotation) *
 								XMMatrixScaling(0.005f, 0.005f, 0.005f));
 
 	_camera.Update();

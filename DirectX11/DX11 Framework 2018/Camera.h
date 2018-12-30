@@ -18,6 +18,14 @@ public:
 
 	XMFLOAT4X4 Update();
 
+	float xPosCar;
+	float yPosCar;
+	float zPosCar;
+
+	float GetxPosCar() { return xPosCar; }
+	float GetyPosCar() { return yPosCar; }
+	float GetzPosCar() { return zPosCar; }
+
 private:
 
 	XMFLOAT4X4              _view;
@@ -25,7 +33,8 @@ private:
 	UINT _WindowHeight;
 	UINT _WindowWidth;
 
-	
+
+
 
 };
 
