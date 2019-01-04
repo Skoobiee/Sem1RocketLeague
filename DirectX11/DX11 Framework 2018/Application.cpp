@@ -968,8 +968,7 @@ void Application::Update()
 	}
 
 
-	//if (!carIsMoving)
-	//{
+	
 
 	if (carSpeed <= 3.0f)
 	{
@@ -985,7 +984,7 @@ void Application::Update()
 		{
 			zPosCar = zPosCar - carSpeed;
 			carSpeed += 0.05f;
-			xThirdPerson += 0.05f;
+			//xThirdPerson += 0.05f;
 			//carIsMoving = true;
 		}
 
@@ -994,7 +993,7 @@ void Application::Update()
 			xPosCar = xPosCar - carSpeed;
 			carSpeed += 0.02f;
 			xRotation = xRotation - 0.01;
-			zThirdPerson += 0.02f;
+			//zThirdPerson += 0.02f;
 			//carIsMoving = true;
 		}
 
@@ -1003,7 +1002,7 @@ void Application::Update()
 			xPosCar = xPosCar + carSpeed;
 			carSpeed += 0.02f;
 			xRotation = xRotation + 0.01;
-			zThirdPerson += 0.02f;
+			//zThirdPerson += 0.02f;
 			//carIsMoving = true;
 		}
 
