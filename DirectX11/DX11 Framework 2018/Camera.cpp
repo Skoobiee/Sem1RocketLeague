@@ -26,7 +26,7 @@ Camera::Camera()
 	yThirdPerson = 1.0f;
 	zThirdPerson = -6.5f;
 
-	xPosCar = 5.0f;
+	//xPosCar = 5.0f;
 }
 
 Camera::~Camera()
@@ -36,7 +36,7 @@ Camera::~Camera()
 
 XMFLOAT4X4 Camera::Update()
 {
-	xThirdPerson = xPosCar + 10.0f;
+	//xThirdPerson = xPosCar + 10.0f;
 
 	if (GetAsyncKeyState('1')) //static forward
 	{
