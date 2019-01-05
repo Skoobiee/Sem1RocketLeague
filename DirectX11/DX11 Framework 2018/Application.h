@@ -49,7 +49,7 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
-	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar, _worldPowerup, _worldPowerup2, _worldPowerup3; //a world for each object
+	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar, _worldPowerup, _worldPowerup2, _worldPowerup3, _worldWall, _worldWall2, _worldWall3, _worldWall4; //a world for each object
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
 
