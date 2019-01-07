@@ -169,6 +169,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 		XMMatrixTranslation(-0.7f, -3.5f, 1.0f)*
 		XMMatrixScaling(40.1f, 1.0f, 40.1f));
 
+	//Wall
+	XMStoreFloat4x4(&_worldWall, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+		XMMatrixTranslation(1.0f, 0.1f, 1.0f)*
+		XMMatrixScaling(10.0f, 40.0f, 40.1f));
+
 	//Powerup
 	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
 		XMMatrixTranslation(15.0f, -5.0f, -1.0f) *
@@ -1235,6 +1240,12 @@ void Application::Draw()
 	_pImmediateContext->IASetIndexBuffer(_pGridIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	world = XMLoadFloat4x4(&_world4);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+	_pImmediateContext->DrawIndexed(54, 0, 0);
+
+	//Wall
+	world = XMLoadFloat4x4(&_worldWall);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 	_pImmediateContext->DrawIndexed(54, 0, 0);
