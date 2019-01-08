@@ -171,8 +171,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//Wall
 	XMStoreFloat4x4(&_worldWall, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
-		XMMatrixTranslation(1.0f, 0.1f, 1.0f)*
-		XMMatrixScaling(10.0f, 40.0f, 40.1f));
+		XMMatrixTranslation(1.0f, 0.005f, 1.0f)*
+		XMMatrixScaling(40.1f, 1.0f, 40.1f));
 
 	//Powerup
 	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
@@ -1061,6 +1061,11 @@ void Application::Update()
 							//	XMMatrixRotationY(xRotation) *
 								XMMatrixScaling(0.005f, 0.005f, 0.005f));
 
+	//Third Person Camera
+	XMStoreFloat4x4(&_worldCamera3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
+									XMMatrixTranslation(xPosCar + 10.0f, yPosCar, zPosCar) *
+									XMMatrixScaling(0.005f, 0.005f, 0.005f));
+
 	_camera.Update();
 
 	if (daytime)
@@ -1194,6 +1199,10 @@ void Application::Draw()
 	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshData.VertexBuffer, &stride2, &offset2);
 	_pImmediateContext->IASetIndexBuffer(objMeshData.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshData.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldCamera3);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTexturePowerup); 
 
