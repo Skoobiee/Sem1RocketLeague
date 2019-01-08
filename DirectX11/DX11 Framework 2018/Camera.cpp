@@ -54,7 +54,7 @@ XMFLOAT4X4 Camera::Update()
 
 		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
-	else if (GetAsyncKeyState('3')) //fixed to car
+	else if (GetAsyncKeyState('3')) //first person
 	{
 		
 	}
@@ -81,6 +81,14 @@ XMFLOAT4X4 Camera::GetView()
 XMFLOAT4X4 Camera::GetProjection()
 {
 	return _projection;
+}
+
+float SetThirdPersonCamera(float x, float y, float z)
+{
+	x = xThirdPerson;
+
+
+
 }
 
 //XMFLOAT4X4 Camera::GetThirdPersonCamera()

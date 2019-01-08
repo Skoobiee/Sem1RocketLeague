@@ -18,13 +18,15 @@ public:
 
 	XMFLOAT4X4 Update();
 
-	float GetxPosCar() { return xPosCar; }
-	float GetyPosCar() { return yPosCar; }
-	float GetzPosCar() { return zPosCar; }
+	//float GetxPosCar() { return xPosCar; }
+	//float GetyPosCar() { return yPosCar; }
+	//float GetzPosCar() { return zPosCar; }
 
-	float GetxThirdPerson() { return xThirdPerson; }
-	float GetyThirdPerson() { return yThirdPerson; }
-	float GetzThirdPerson() { return zThirdPerson; }
+	float SetThirdPersonCamera(float x, float y, float z);
+
+	//float GetxThirdPerson() { return xThirdPerson; }
+	//float GetyThirdPerson() { return yThirdPerson; }
+	//float GetzThirdPerson() { return zThirdPerson; }
 
 private:
 
@@ -33,9 +35,9 @@ private:
 	UINT _WindowHeight;
 	UINT _WindowWidth;
 
-	float xPosCar;
-	float yPosCar;
-	float zPosCar;
+	//float xPosCar;
+	//float yPosCar;
+	//float zPosCar;
 
 	float xThirdPerson;
 	float yThirdPerson;
