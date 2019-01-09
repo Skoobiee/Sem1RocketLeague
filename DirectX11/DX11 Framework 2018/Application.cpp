@@ -49,6 +49,12 @@ Application::Application()
 	_pCarIndexBuffer = nullptr;
 	_pPowerupVertexBuffer = nullptr;
 	_pPowerupIndexBuffer = nullptr;
+	_pPowerupBaseVertexBuffer = nullptr;
+	_pPowerupBaseIndexBuffer = nullptr;
+	_pBallVertexBuffer = nullptr;
+	_pBallIndexBuffer = nullptr;
+	_pWallVertexBuffer = nullptr;
+	_pWallIndexBuffer = nullptr;
 	_pConstantBuffer = nullptr;
 
 	srand(time(NULL));
@@ -120,6 +126,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
+	CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerupBase);
+
+	CreateDDSTextureFromFile(_pd3dDevice, L"Ball.dds", 0, &_pTextureBall);
+
+	CreateDDSTextureFromFile(_pd3dDevice, L"Ball.dds", 0, &_pTextureWall);
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -148,6 +159,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	objMeshData = OBJLoader::Load("car.obj", _pd3dDevice, false);
 	objMeshDataSphere = OBJLoader::Load("sphere.obj", _pd3dDevice);
+	objMeshDataDonut = OBJLoader::Load("donut.obj", _pd3dDevice);
+	objMeshDataCube = OBJLoader::Load("cube.obj", _pd3dDevice);
 
 	timeOfDay = 0;
 	timeOfNight = 0;
@@ -171,22 +184,38 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//Wall
 	XMStoreFloat4x4(&_worldWall, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
-		XMMatrixTranslation(1.0f, 10.5f, 1.0f)*
-		XMMatrixRotationY(90) *
-		XMMatrixScaling(40.1f, 40.0f, 40.1f));
+		XMMatrixTranslation(-0.7f, -1.5f, 1.0f)*
+		XMMatrixScaling(40.1f, 1.0f, 40.1f));
 
 	//Powerup
-	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-		XMMatrixTranslation(15.0f, -5.0f, -1.0f) *
+	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
+		XMMatrixTranslation(120.0f, -15.0f, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
-	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-		XMMatrixTranslation(25.0f, -5.0f, 20.0f) *
+	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
+		XMMatrixTranslation(-120.0f, -15.0f, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
-	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-		XMMatrixTranslation(50.0f, -5.0f, 20.0f) *
+	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
+		XMMatrixTranslation(45.0f, -15.0f, 17.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	//PowerupBase
+	XMStoreFloat4x4(&_worldPowerupBase, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
+		XMMatrixTranslation(120.0f, -35.0f, -1.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerupBase2, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
+		XMMatrixTranslation(-120.0f, -35.0f, -1.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerupBase3, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
+		XMMatrixTranslation(50.0f, -35.0f, 20.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	//Ball
+	XMStoreFloat4x4(&_worldBall, XMMatrixScaling(0.8f, 0.8f, 0.8f) *
+		XMMatrixTranslation(2.0f, -2.7f, 8.0f));
 
 	return S_OK;
 }
@@ -484,6 +513,75 @@ HRESULT Application::InitPowerupVertexBuffer()
 	return S_OK;
 }
 
+HRESULT Application::InitPowerupBaseVertexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(SimpleVertex) * 300;
+	MeshData.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = vertices;
+
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pPowerupBaseVertexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT Application::InitBallVertexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(SimpleVertex) * 300;
+	MeshData.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = vertices;
+
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pBallVertexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT Application::InitWallVertexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(SimpleVertex) * 300;
+	MeshData.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = vertices;
+
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pWallVertexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
 HRESULT Application::InitIndexBuffer()
 {
 	HRESULT hr;
@@ -664,6 +762,75 @@ HRESULT Application::InitPowerupIndexBuffer()
 	return S_OK;
 }
 
+HRESULT Application::InitPowerupBaseIndexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(WORD) * 300;
+	MeshData.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = indices;
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pPowerupBaseIndexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT Application::InitBallIndexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(WORD) * 300;
+	MeshData.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = indices;
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pBallIndexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT Application::InitWallIndexBuffer()
+{
+	HRESULT hr;
+
+	D3D11_BUFFER_DESC MeshData;
+	ZeroMemory(&MeshData, sizeof(MeshData));
+
+	MeshData.Usage = D3D11_USAGE_DEFAULT;
+	MeshData.ByteWidth = sizeof(WORD) * 300;
+	MeshData.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	MeshData.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	//InitData.pSysMem = indices;
+	hr = _pd3dDevice->CreateBuffer(&MeshData, &InitData, &_pWallIndexBuffer);
+
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
 HRESULT Application::InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
     // Register class
@@ -835,12 +1002,18 @@ HRESULT Application::InitDevice()
 	InitGridVertexBuffer();
 	InitCarVertexBuffer();
 	InitPowerupVertexBuffer();
+	InitPowerupBaseVertexBuffer();
+	InitBallVertexBuffer();
+	InitWallVertexBuffer();
 
 	InitIndexBuffer();
 	InitPyramidIndexBuffer();
 	InitGridIndexBuffer();
 	InitCarIndexBuffer();
 	InitPowerupIndexBuffer();
+	InitPowerupBaseIndexBuffer();
+	InitBallIndexBuffer();
+	InitWallIndexBuffer();
 
     // Set primitive topology
     _pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -899,6 +1072,15 @@ void Application::Cleanup()
 
 	if (_pPowerupVertexBuffer) _pPowerupVertexBuffer->Release();
 	if (_pPowerupIndexBuffer) _pPowerupIndexBuffer->Release();
+
+	if (_pPowerupBaseVertexBuffer) _pPowerupBaseVertexBuffer->Release();
+	if (_pPowerupBaseIndexBuffer) _pPowerupBaseIndexBuffer->Release();
+
+	if (_pBallVertexBuffer) _pBallVertexBuffer->Release();
+	if (_pBallIndexBuffer) _pBallIndexBuffer->Release();
+
+	if (_pWallVertexBuffer) _pWallVertexBuffer->Release();
+	if (_pWallIndexBuffer) _pWallIndexBuffer->Release();
 
     if (_pVertexLayout) _pVertexLayout->Release();
     if (_pVertexShader) _pVertexShader->Release();
@@ -1237,6 +1419,61 @@ void Application::Draw()
 	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
 
+	//Renders the PowerupBases
+	world = XMLoadFloat4x4(&_worldPowerupBase);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	unsigned int stride5 = objMeshDataDonut.VBStride;
+	unsigned int offset5 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataDonut.VertexBuffer, &stride5, &offset5);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataDonut.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataDonut.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldPowerupBase2);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataDonut.VertexBuffer, &stride5, &offset5);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataDonut.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataDonut.IndexCount, 0, 0);
+	
+	world = XMLoadFloat4x4(&_worldPowerupBase3);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataDonut.VertexBuffer, &stride5, &offset5);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataDonut.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataDonut.IndexCount, 0, 0);
+
+	//Ball
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureBall);
+
+	world = XMLoadFloat4x4(&_worldBall);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	unsigned int stride4 = objMeshDataSphere.VBStride;
+	unsigned int offset4 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataSphere.VertexBuffer, &stride4, &offset4);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
+
+	//Walls
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureWall);
+
+	world = XMLoadFloat4x4(&_worldWall);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	unsigned int stride6 = objMeshDataCube.VBStride;
+	unsigned int offset6 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
 
 	////Renders second cube
 	//world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
@@ -1257,10 +1494,10 @@ void Application::Draw()
 	_pImmediateContext->DrawIndexed(54, 0, 0);
 
 	//Wall
-	world = XMLoadFloat4x4(&_worldWall);
+	/*world = XMLoadFloat4x4(&_worldWall);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(54, 0, 0);
+	_pImmediateContext->DrawIndexed(54, 0, 0);*/
 
 	// Set the blend state for transparent objects
 	_pImmediateContext->OMSetBlendState(Transparency, blendFactor, 0xffffffff);

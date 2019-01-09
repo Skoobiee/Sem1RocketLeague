@@ -49,7 +49,11 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
-	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar, _worldPowerup, _worldPowerup2, _worldPowerup3, _worldWall, _worldWall2, _worldWall3, _worldWall4, _worldCamera3; //a world for each object
+
+	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar,
+							_worldPowerup, _worldPowerup2, _worldPowerup3, _worldPowerupBase, _worldPowerupBase2, _worldPowerupBase3, 
+							_worldBall, _worldWall, _worldWall2, _worldWall3, _worldWall4, _worldCamera3; //a world for each object
+
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
 
@@ -64,6 +68,15 @@ private:
 
 	ID3D11Buffer*           _pPowerupVertexBuffer;
 	ID3D11Buffer*           _pPowerupIndexBuffer;
+
+	ID3D11Buffer*           _pPowerupBaseVertexBuffer;
+	ID3D11Buffer*           _pPowerupBaseIndexBuffer;
+
+	ID3D11Buffer*           _pBallVertexBuffer;
+	ID3D11Buffer*           _pBallIndexBuffer;
+
+	ID3D11Buffer*           _pWallVertexBuffer;
+	ID3D11Buffer*           _pWallIndexBuffer;
 
 	XMFLOAT3 lightDirection;
 	XMFLOAT4 diffuseMaterial;
@@ -86,7 +99,8 @@ private:
 
 	MeshData objMeshData;
 	MeshData objMeshDataSphere;
-
+	MeshData objMeshDataDonut;
+	MeshData objMeshDataCube;
 
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
 	HRESULT InitDevice();
@@ -109,6 +123,15 @@ private:
 	HRESULT InitPowerupVertexBuffer();
 	HRESULT InitPowerupIndexBuffer();
 
+	HRESULT InitPowerupBaseVertexBuffer();
+	HRESULT InitPowerupBaseIndexBuffer();
+
+	HRESULT InitBallVertexBuffer();
+	HRESULT InitBallIndexBuffer();
+
+	HRESULT InitWallVertexBuffer();
+	HRESULT InitWallIndexBuffer();
+
 	UINT _WindowHeight;
 	UINT _WindowWidth;
 
@@ -125,6 +148,9 @@ private:
 	ID3D11ShaderResourceView * _pTextureBlue = nullptr;
 	ID3D11ShaderResourceView * _pTextureCar = nullptr;
 	ID3D11ShaderResourceView * _pTexturePowerup = nullptr;
+	ID3D11ShaderResourceView * _pTexturePowerupBase = nullptr;
+	ID3D11ShaderResourceView * _pTextureBall = nullptr;
+	ID3D11ShaderResourceView * _pTextureWall = nullptr;
 
 	int timeOfDay;
 	int timeOfNight;
