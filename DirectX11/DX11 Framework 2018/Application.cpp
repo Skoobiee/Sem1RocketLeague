@@ -1158,20 +1158,22 @@ void Application::Update()
 
 	
 
-	if (carSpeed <= 3.0f)
+	if (GetAsyncKeyState)
 	{
+		carSpeed += 0.02f;
+
 		if (GetAsyncKeyState('W'))
 		{
 			zPosCar = zPosCar + carSpeed;
-			carSpeed += 0.02f;
+			//carSpeed += 0.02f;
 			//xThirdPerson += 10.0f;
 			//carIsMoving = true;
 		}
-		
+
 		if (GetAsyncKeyState('S'))
 		{
 			zPosCar = zPosCar - carSpeed;
-			carSpeed += 0.05f;
+			//carSpeed += 0.05f;
 			//xThirdPerson += 0.05f;
 			//carIsMoving = true;
 		}
@@ -1179,8 +1181,8 @@ void Application::Update()
 		if (GetAsyncKeyState('A'))
 		{
 			xPosCar = xPosCar - carSpeed;
-			carSpeed += 0.02f;
-			xRotation = xRotation - 0.01;
+			//carSpeed += 0.02f;
+			//xRotation = xRotation - 0.01;
 			//zThirdPerson += 0.02f;
 			//carIsMoving = true;
 		}
@@ -1188,18 +1190,28 @@ void Application::Update()
 		if (GetAsyncKeyState('D'))
 		{
 			xPosCar = xPosCar + carSpeed;
-			carSpeed += 0.02f;
-			xRotation = xRotation + 0.01;
+			//carSpeed += 0.02f;
+			//xRotation = xRotation + 0.01;
 			//zThirdPerson += 0.02f;
 			//carIsMoving = true;
 		}
-
+	}
+	else
+	{
 		carSpeed = 2.0f;
+	}
+
+		/*if (carSpeed >= 10.0f)
+		{
+			carSpeed = 10.0f;
+		}*/
+
+		//carSpeed = 2.0f;
 		/*if (GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
 		{
 
 		}*/
-	}
+	
 
 	if (xRotation >= 360 || xRotation <= -360)
 	{
