@@ -56,7 +56,11 @@ XMFLOAT4X4 Camera::Update()
 	}
 	else if (GetAsyncKeyState('3')) //first person
 	{
-		
+		XMVECTOR Eye = XMVectorSet(2.0f, 2.0f, -5.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(1.0f, -1.0f, 3.0f, 0.0f);
+		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
 	else if (GetAsyncKeyState('4')) //third person
 	{
@@ -85,10 +89,11 @@ XMFLOAT4X4 Camera::GetProjection()
 
 float SetThirdPersonCamera(float x, float y, float z)
 {
-	x = xThirdPerson;
+	x = 0.0f;
+	y = 1.0f;
+	z = -6.5f;
 
-
-
+	return x, y, z;
 }
 
 //XMFLOAT4X4 Camera::GetThirdPersonCamera()
