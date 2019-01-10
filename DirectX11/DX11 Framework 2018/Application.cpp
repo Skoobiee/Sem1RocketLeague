@@ -130,7 +130,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Ball.dds", 0, &_pTextureBall);
 
-	CreateDDSTextureFromFile(_pd3dDevice, L"Ball.dds", 0, &_pTextureWall);
+	CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTextureWall);
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -184,8 +184,20 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//Wall
 	XMStoreFloat4x4(&_worldWall, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
-		XMMatrixTranslation(-0.7f, -1.5f, 1.0f)*
-		XMMatrixScaling(40.1f, 1.0f, 40.1f));
+		XMMatrixTranslation(-15.0f, 0.2f, 0.0f)*
+		XMMatrixScaling(2.0f, 25.0f, 80.1f));
+
+	XMStoreFloat4x4(&_worldWall2, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+		XMMatrixTranslation(15.0f, 0.2f, 0.0f)*
+		XMMatrixScaling(2.0f, 25.0f, 80.1f));
+
+	XMStoreFloat4x4(&_worldWall3, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+		XMMatrixTranslation(0.0f, 0.2f, 5.0f)*
+		XMMatrixScaling(2.0f, 25.0f, 80.1f));
+
+	XMStoreFloat4x4(&_worldWall4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
+		XMMatrixTranslation(15.0f, 0.2f, 0.0f)*
+		XMMatrixScaling(2.0f, 25.0f, 80.1f));
 
 	//Powerup
 	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
@@ -1162,7 +1174,7 @@ void Application::Update()
 	{
 		carSpeed += 0.02f;
 
-		if (GetAsyncKeyState('W'))
+		if (GetAsyncKeyState('W')) //Set a bool to true for each, run a function to check for input
 		{
 			zPosCar = zPosCar + carSpeed;
 			//carSpeed += 0.02f;
@@ -1473,20 +1485,6 @@ void Application::Draw()
 	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
 
-	//Walls
-	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureWall);
-
-	world = XMLoadFloat4x4(&_worldWall);
-	cb.mWorld = XMMatrixTranspose(world);
-	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-
-	unsigned int stride6 = objMeshDataCube.VBStride;
-	unsigned int offset6 = 0;
-
-	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
-	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
-
 	////Renders second cube
 	//world = XMLoadFloat4x4(&_world2); //converts float to mxmatrix
 	//cb.mWorld = XMMatrixTranspose(world);//passes it into the constant buffer
@@ -1515,6 +1513,44 @@ void Application::Draw()
 	_pImmediateContext->OMSetBlendState(Transparency, blendFactor, 0xffffffff);
 
 	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureBlue); //binds to pipeline
+
+	//Walls
+	_pImmediateContext->PSSetShaderResources(0, 1, &_pTextureWall);
+
+	world = XMLoadFloat4x4(&_worldWall);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	unsigned int stride6 = objMeshDataCube.VBStride;
+	unsigned int offset6 = 0;
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldWall2);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldWall3);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldWall4);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataCube.VertexBuffer, &stride6, &offset6);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataCube.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
 
 	 //Renders a pyramid
 	_pImmediateContext->IASetVertexBuffers(0, 1, &_pPyramidVertexBuffer, &stride, &offset);
