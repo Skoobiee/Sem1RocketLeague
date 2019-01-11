@@ -90,6 +90,11 @@ private:
 	float specularPower;
 	XMFLOAT3 eyePosW;
 
+	/*XMFLOAT3 lightDirection2;
+	XMFLOAT4 specularMtrl2;
+	XMFLOAT4 specularLight2;
+	XMFLOAT3 eyePosW2;*/
+
 	ID3D11BlendState* Transparency;
 
 	Camera _camera;
@@ -164,11 +169,19 @@ private:
 	float xRotation;
 	bool carIsMoving;
 
+	//bool carIsMovingUp;
+	//bool carIsMovingDown;
+	//bool carIsMovingLeft;
+	//bool carIsMovingRight;
+
 	float boost;
 
 	float xThirdPerson;
 	float yThirdPerson;
 	float zThirdPerson;
+
+	float yPosPowerup;
+	int counter;
 
 public:
 	Application();

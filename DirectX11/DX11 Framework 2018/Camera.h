@@ -28,6 +28,11 @@ public:
 	//float GetyThirdPerson() { return yThirdPerson; }
 	//float GetzThirdPerson() { return zThirdPerson; }
 
+	void SetTargetPosition(float x, float y, float z);
+
+	XMFLOAT3 TargetPosition;
+	XMFLOAT3 TrackingOffset;
+
 private:
 
 	XMFLOAT4X4              _view;
