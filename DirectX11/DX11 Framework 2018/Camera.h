@@ -24,6 +24,8 @@ public:
 
 	float SetThirdPersonCamera(float x, float y, float z);
 
+	XMFLOAT4X4 ThirdPersonCamera();
+
 	//float GetxThirdPerson() { return xThirdPerson; }
 	//float GetyThirdPerson() { return yThirdPerson; }
 	//float GetzThirdPerson() { return zThirdPerson; }
@@ -47,5 +49,7 @@ private:
 	float xThirdPerson;
 	float yThirdPerson;
 	float zThirdPerson;
+
+	bool thirdPerson;
 };
 
