@@ -22,17 +22,36 @@ Camera::Camera()
 	yPosCar = -700.0f;
 	zPosCar = -1.0f;*/
 	
-	xThirdPerson = 0.0f;
+	/*xThirdPerson = 0.0f;
 	yThirdPerson = 1.0f;
-	zThirdPerson = -6.5f;
+	zThirdPerson = -6.5f;*/
+
+
+	//TrackingOffset.x = -5.0f;
+	//TrackingOffset.y = 701.0f;
+	//TrackingOffset.z = -6.0f;
+
+	//TargetPosition.x = 2.0f;
+	//TargetPosition.y = -2.0f;
+	//TargetPosition.z = -5.0f;
+
+
 
 	TrackingOffset.x = -5.0f;
 	TrackingOffset.y = 701.0f;
 	TrackingOffset.z = -6.0f;
 
-	TargetPosition.x = 2.0f;
-	TargetPosition.y = -2.0f;
-	TargetPosition.z = -5.0f;
+	TargetPosition.x = 5.0f;
+	TargetPosition.y = -700.0f;
+	TargetPosition.z = -1.0f;
+
+	xThirdPerson = TrackingOffset.x + TargetPosition.x;
+	yThirdPerson = TrackingOffset.y + TargetPosition.y;
+	zThirdPerson = TrackingOffset.z + TargetPosition.z;
+
+	/*&TargetPosition.x + TrackingOffset.x = xThirdPerson;
+	&TargetPosition.y + TrackingOffset.y = yThirdPerson;
+	&TargetPosition.z + TrackingOffset.z = zThirdPerson;*/
 
 	thirdPerson = false;
 
@@ -99,13 +118,18 @@ XMFLOAT4X4 Camera::Update()
 
 XMFLOAT4X4 Camera::ThirdPersonCamera()
 {
-	XMVECTOR Eye3 = XMVectorSet(TargetPosition.x + TrackingOffset.x, TargetPosition.y + TrackingOffset.y, TargetPosition.z + TrackingOffset.z, 0.0f);
+	//XMVECTOR Eye3 = XMVectorSet(TargetPosition.x + TrackingOffset.x, TargetPosition.y + TrackingOffset.y, TargetPosition.z + TrackingOffset.z, 0.0f);
+	XMVECTOR Eye3 = XMVectorSet(xThirdPerson, yThirdPerson, zThirdPerson, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, -1.0f, 3.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye3, At, Up));
 
-	return _projection;
+	//TargetPosition.x = 0;
+	//TargetPosition.y = 0;
+	//TargetPosition.z = 0;
+
+	return _view;
 }
 
 void Camera::SetTargetPosition(float x, float y, float z)

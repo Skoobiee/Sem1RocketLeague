@@ -51,5 +51,7 @@ private:
 	float zThirdPerson;
 
 	bool thirdPerson;
+
+
 };
 
