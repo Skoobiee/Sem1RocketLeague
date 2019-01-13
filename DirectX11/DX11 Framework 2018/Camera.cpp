@@ -82,8 +82,8 @@ XMFLOAT4X4 Camera::Update()
 	{
 		thirdPerson = false;
 
-		XMVECTOR Eye = XMVectorSet(0.0f, 12.0f, -1.0f, 0.0f);
-		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR Eye = XMVectorSet(0.0f, 30.0f, -5.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(0.0f, -1.0f, 2.0f, 0.0f);
 		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));

@@ -208,24 +208,33 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//PowerupBase
 	XMStoreFloat4x4(&_worldPowerupBase, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
-		XMMatrixTranslation(120.0f, -35.0f, -1.0f) *
+		XMMatrixTranslation(220.0f, -35.0f, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	XMStoreFloat4x4(&_worldPowerupBase2, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
-		XMMatrixTranslation(-120.0f, -35.0f, -1.0f) *
+		XMMatrixTranslation(-220.0f, -35.0f, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	XMStoreFloat4x4(&_worldPowerupBase3, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
-		XMMatrixTranslation(50.0f, -35.0f, 20.0f) *
+		XMMatrixTranslation(220.0f, -35.0f, 220.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerupBase4, XMMatrixScaling(7.0f, 7.0f, 7.0f) *
+		XMMatrixTranslation(-220.0f, -35.0f, 220.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	//Ball
 	XMStoreFloat4x4(&_worldBall, XMMatrixScaling(0.8f, 0.8f, 0.8f) *
-		XMMatrixTranslation(2.0f, -2.7f, 8.0f));
+		XMMatrixTranslation(0.0f, -2.7f, 8.0f));
+
+	//XMStoreFloat4x4(&_rotate, XMMatrixIdentity());
+
+	/*m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
+	m_fontPos.x = backBufferWidth / 2.f;
+	m_fontPos.y = backBufferHeight / 2.f;*/
 
 	return S_OK;
 }
-
 
 
 HRESULT Application::InitShadersAndInputLayout()
@@ -1099,6 +1108,11 @@ void Application::Cleanup()
 	if (Transparency) Transparency->Release();
 }
 
+//void Application::SetRotation(float x, float y, float z)
+//{
+//	XMStoreFloat4x4(&_rotate, XMMatrixRotationX(x) * XMMatrixRotationY(y) * XMMatrixRotationZ(z));
+//}
+
 void Application::Update()
 {
 	// Update our time
@@ -1128,16 +1142,12 @@ void Application::Update()
 								XMMatrixTranslation(2.0f, 0.0f, 0.0f) * 
 								XMMatrixRotationZ(t * 2.0f));
 
-	//Pryamid
+	//Pyramid,  can take a translation and rotation from previous object to rotate around it
 	XMStoreFloat4x4(&_world3, XMMatrixRotationZ(t) *
-								XMMatrixScaling(0.45f, 0.45f, 0.45f) *
-								XMMatrixRotationZ(t * 2.0f) * //can take a translation and rotation from previous object to rotate around it
-								XMMatrixTranslation(-2.0f, 0.0f, 5.0f) *
-								XMMatrixRotationZ(t * 5.0f) *
-								XMMatrixTranslation(-2.0f, 0.0f, 5.0f) *
+								XMMatrixTranslation(2.0f, 0.0f, 5.0f) *
+								XMMatrixScaling(0.9f, 0.9f, 0.9f) *
 								XMMatrixRotationZ(t * 2.0f));
 
-	
 
 	/*XMStoreFloat4x4(&_world5, XMMatrixScaling(0.5f, 0.5f, 0.5f) *
 								XMMatrixTranslation(-0.7f, -1.5f, 1.85f)*
@@ -1198,54 +1208,36 @@ void Application::Update()
 
 		_camera.SetTargetPosition(xPosCar, yPosCar, zPosCar);
 
-		/*if (carSpeed >= 10.0f)
-		{
-			carSpeed = 10.0f;
-		}*/
+	/*XMMATRIX rotate = XMLoadFloat4x4(&_rotate);
+	XMStoreFloat4x4(&_world, rotate);*/
 
-		//carSpeed = 2.0f;
-		/*if (GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
-		{
-
-		}*/
-	
-
-	if (xRotation >= 360 || xRotation <= -360)
-	{
-		xRotation = 0;
-	}
-
+	//if (xRotation >= 360 || xRotation <= -360)
+	//{
+	//	xRotation = 0;
+	//}
 
 		//If statement for when car collides with pickup
 		//destroy pickup
 		//if boost < 75, add to boost (max 100) (25 each)
 
-	
-	
-		/*if (!GetAsyncKeyState('W') || GetAsyncKeyState('S') || GetAsyncKeyState('A') || GetAsyncKeyState('D'))
-		{
-			carSpeed = 2.0f;
-		}*/
+	boost += 0.1;
 
-		/*else
+	if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
+	{
+		if (GetAsyncKeyState('S'))
 		{
-			carIsMoving = false;
+			carSpeed = 3.0f;
 		}
-	/}*/
-
-	
-	//if (GetAsyncKeyState(VK_SHIFT))
-	//{
-	//	if (boost <= 100 && carSpeed <= 3.0f) //pickup collides with car, add to boost
-	//	{
-	//		carSpeed = carSpeed + 0.01f;
-	//		boost = boost - 5.0f;
-	//	}
-	//	else
-	//	{
-	//		carSpeed = 2.0f;
-	//	}
-	//}
+		else
+		{
+			carSpeed = 5.0f;
+			boost -= 0.5;
+		}
+	}
+	else
+	{
+		carSpeed = 2.0f;
+	}
 
 	//Car
 	XMStoreFloat4x4(&_worldCar, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
@@ -1255,7 +1247,7 @@ void Application::Update()
 
 	//Third Person Camera
 	XMStoreFloat4x4(&_worldCamera3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-									XMMatrixTranslation(xPosCar + 10.0f, yPosCar, zPosCar) *
+									XMMatrixTranslation(xPosCar, yPosCar, zPosCar) *
 									XMMatrixScaling(0.005f, 0.005f, 0.005f));
 
 	//XMMATRIX rotationMatrix = XMMatrixRotationX;
@@ -1279,15 +1271,19 @@ void Application::Update()
 
 	//Powerup
 	XMStoreFloat4x4(&_worldPowerup, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
-		XMMatrixTranslation(120.0f, yPosPowerup, -1.0f) *
+		XMMatrixTranslation(220.0f, yPosPowerup, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	XMStoreFloat4x4(&_worldPowerup2, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
-		XMMatrixTranslation(-120.0f, yPosPowerup, -1.0f) *
+		XMMatrixTranslation(-220.0f, yPosPowerup, -1.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	XMStoreFloat4x4(&_worldPowerup3, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
-		XMMatrixTranslation(45.0f, yPosPowerup, 17.0f) *
+		XMMatrixTranslation(220.0f, yPosPowerup, 220.0f) *
+		XMMatrixScaling(0.1f, 0.1f, 0.1f));
+
+	XMStoreFloat4x4(&_worldPowerup4, XMMatrixScaling(3.0f, 3.0f, 3.0f) *
+		XMMatrixTranslation(-220.0f, yPosPowerup, 220.0f) *
 		XMMatrixScaling(0.1f, 0.1f, 0.1f));
 
 	if (daytime)
@@ -1344,6 +1340,17 @@ void Application::Update()
 		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
 		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
+
+	//m_spriteBatch->Begin();
+
+	//const wchar_t* output = L"Boost: " (boost);
+
+	//Vector2 origin = m_font->MeasureString(output) / 2.f;
+
+	//m_font->DrawString(m_spriteBatch.get(), output,
+	//	m_fontPos, Colors::White, 0.f, origin);
+
+	//m_spriteBatch->End();
 }
 
 void Application::Draw()
@@ -1456,6 +1463,14 @@ void Application::Draw()
 	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
 
+	world = XMLoadFloat4x4(&_worldPowerup4);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataSphere.VertexBuffer, &stride3, &offset3);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataSphere.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataSphere.IndexCount, 0, 0);
+
 	//Renders the PowerupBases
 
 	//cb.SpecularLight = XMFLOAT4(specularLight2);
@@ -1481,6 +1496,14 @@ void Application::Draw()
 	_pImmediateContext->DrawIndexed(objMeshDataDonut.IndexCount, 0, 0);
 	
 	world = XMLoadFloat4x4(&_worldPowerupBase3);
+	cb.mWorld = XMMatrixTranspose(world);
+	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+
+	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshDataDonut.VertexBuffer, &stride5, &offset5);
+	_pImmediateContext->IASetIndexBuffer(objMeshDataDonut.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_pImmediateContext->DrawIndexed(objMeshDataDonut.IndexCount, 0, 0);
+
+	world = XMLoadFloat4x4(&_worldPowerupBase4);
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 
@@ -1570,14 +1593,14 @@ void Application::Draw()
 	_pImmediateContext->DrawIndexed(objMeshDataCube.IndexCount, 0, 0);
 
 	 //Renders a pyramid
-	/*_pImmediateContext->IASetVertexBuffers(0, 1, &_pPyramidVertexBuffer, &stride, &offset);
+	_pImmediateContext->IASetVertexBuffers(0, 1, &_pPyramidVertexBuffer, &stride, &offset);
 
 	_pImmediateContext->IASetIndexBuffer(_pPyramidIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	world = XMLoadFloat4x4(&_world3); 
 	cb.mWorld = XMMatrixTranspose(world);
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0); 
-	_pImmediateContext->DrawIndexed(18, 0, 0); */
+	_pImmediateContext->DrawIndexed(18, 0, 0); 
 
     // Present our back buffer to our front buffer
     _pSwapChain->Present(0, 0);

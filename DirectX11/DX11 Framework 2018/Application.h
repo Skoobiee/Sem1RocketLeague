@@ -2,16 +2,19 @@
 
 #include <d3dcompiler.h>
 #include <directxcolors.h>
+//#include <SpriteBatch.h>
 #include "resource.h"
 #include <time.h>
 #include "DDSTextureLoader.h"
 #include "Camera.h"
 #include "Structures.h"
 #include "OBJLoader.h"
+#include <vector>
 
 //#define WM_MOUSEMOVE 0x0200
 
 using namespace DirectX;
+//using namespace DirectX::SimpleMath;
 
 struct ConstantBuffer //has to match in other constant buffer in .fx
 {
@@ -51,7 +54,7 @@ private:
 	ID3D11Buffer*           _pConstantBuffer;
 
 	XMFLOAT4X4              _world, _world2, _world3, _world4, _world5, _worldCar,
-							_worldPowerup, _worldPowerup2, _worldPowerup3, _worldPowerupBase, _worldPowerupBase2, _worldPowerupBase3, 
+							_worldPowerup, _worldPowerup2, _worldPowerup3, _worldPowerup4, _worldPowerupBase, _worldPowerupBase2, _worldPowerupBase3, _worldPowerupBase4,
 							_worldBall, _worldWall, _worldWall2, _worldWall3, _worldWall4, _worldCamera3; //a world for each object
 
 	XMFLOAT4X4              _view;
@@ -182,6 +185,12 @@ private:
 
 	float yPosPowerup;
 	int counter;
+
+	//XMFLOAT4X4 _rotate;
+	//void SetRotation(float x, float y, float z);
+
+	//DirectX::SimpleMath::Vector2 m_fontPos;
+	//std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
 
 public:
 	Application();
