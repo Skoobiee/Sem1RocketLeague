@@ -172,12 +172,8 @@ private:
 	float xRotation;
 	bool carIsMoving;
 
-	//bool carIsMovingUp;
-	//bool carIsMovingDown;
-	//bool carIsMovingLeft;
-	//bool carIsMovingRight;
-
 	float boost;
+	//float cooldown;
 
 	float xThirdPerson;
 	float yThirdPerson;

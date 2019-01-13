@@ -183,6 +183,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	counter = 0;
 
 	boost = 100;
+	//cooldown = 0;
 
 	//Grid
 	XMStoreFloat4x4(&_world4, XMMatrixScaling(0.47f, 0.5f, 0.5f) *
@@ -1105,6 +1106,10 @@ void Application::Cleanup()
     if (_pImmediateContext) _pImmediateContext->Release();
     if (_pd3dDevice) _pd3dDevice->Release();
 
+	if (_pTexturePowerup) _pd3dDevice->Release();
+	if (_pTexturePowerupBase) _pd3dDevice->Release();
+	if (_pTextureCar) _pd3dDevice->Release();
+
 	if (Transparency) Transparency->Release();
 }
 
@@ -1220,9 +1225,37 @@ void Application::Update()
 		//destroy pickup
 		//if boost < 75, add to boost (max 100) (25 each)
 
-	boost += 0.1;
+	//if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
+	//{
+	//	if (GetAsyncKeyState('S'))
+	//	{
+	//		carSpeed = 3.0f;
+	//	}
+	//	else
+	//	{
+	//		carSpeed = 5.0f;
+	//		boost -= 0.5;
+	//		CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTextureCar);
+	//	}
+	//}
+	//else
+	//{
+	//	carSpeed = 2.0f;
+	//	//CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
+	//}
 
-	if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
+		//boost += 0.1;
+
+	if (xPosCar > -4700.0f && xPosCar < -4000.0f && zPosCar > -400.0f && zPosCar < 300.0f
+		|| xPosCar > 4000.0f && xPosCar < 4700.0f && zPosCar > -400.0f && zPosCar < 300.0f
+		|| xPosCar < 4700.0f && xPosCar > 4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f
+		|| xPosCar > -4700.0f && xPosCar < -4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f)
+	{
+		CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTexturePowerup);
+		//CreateDDSTextureFromFile(_pd3dDevice, L"BlueWall.dds", 0, &_pTexturePowerupBase);
+		boost += 0.2;
+	}
+	else if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
 	{
 		if (GetAsyncKeyState('S'))
 		{
@@ -1232,11 +1265,15 @@ void Application::Update()
 		{
 			carSpeed = 5.0f;
 			boost -= 0.5;
+			//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTextureCar);
 		}
 	}
 	else
 	{
 		carSpeed = 2.0f;
+		//CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
+		CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
+		//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerupBase);
 	}
 
 	//Car
