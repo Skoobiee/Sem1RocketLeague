@@ -1195,7 +1195,7 @@ void Application::Update()
 		if (GetAsyncKeyState('A'))
 		{
 			xPosCar = xPosCar - carSpeed;
-			//carSpeed += 0.02f;
+			//XMStoreFloat4x4(&_worldCar, XMMatrixRotationY(2));
 			//xRotation = xRotation - 0.01;
 			//zThirdPerson += 0.02f;
 			carIsMoving = true;
@@ -1204,7 +1204,7 @@ void Application::Update()
 		if (GetAsyncKeyState('D'))
 		{
 			xPosCar = xPosCar + carSpeed;
-			//carSpeed += 0.02f;
+			//XMStoreFloat4x4(&_worldCar, XMMatrixRotationY(200));
 			//xRotation = xRotation + 0.01;
 			//zThirdPerson += 0.02f;
 			carIsMoving = true;
@@ -1251,8 +1251,7 @@ void Application::Update()
 		|| xPosCar < 4700.0f && xPosCar > 4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f
 		|| xPosCar > -4700.0f && xPosCar < -4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f)
 	{
-		CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTexturePowerup);
-		//CreateDDSTextureFromFile(_pd3dDevice, L"BlueWall.dds", 0, &_pTexturePowerupBase);
+		//CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTexturePowerup);
 		boost += 0.2;
 	}
 	else if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
@@ -1265,15 +1264,12 @@ void Application::Update()
 		{
 			carSpeed = 5.0f;
 			boost -= 0.5;
-			//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTextureCar);
 		}
 	}
 	else
 	{
 		carSpeed = 2.0f;
-		//CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
-		CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
-		//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerupBase);
+		//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
 	}
 
 	//Car
@@ -1283,9 +1279,8 @@ void Application::Update()
 								XMMatrixScaling(0.005f, 0.005f, 0.005f));
 
 	//Third Person Camera
-	XMStoreFloat4x4(&_worldCamera3, XMMatrixScaling(5.0f, 5.0f, 5.0f) *
-									XMMatrixTranslation(xPosCar, yPosCar, zPosCar) *
-									XMMatrixScaling(0.005f, 0.005f, 0.005f));
+	/*XMStoreFloat4x4(&_worldCamera3, XMMatrixScaling(0.005f, 0.005f, 0.005f) *
+									XMMatrixTranslation(xPosCar, yPosCar, zPosCar));*/
 
 	//XMMATRIX rotationMatrix = XMMatrixRotationX;
 
@@ -1465,6 +1460,8 @@ void Application::Draw()
 	_pImmediateContext->IASetVertexBuffers(0, 1, &objMeshData.VertexBuffer, &stride2, &offset2);
 	_pImmediateContext->IASetIndexBuffer(objMeshData.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	_pImmediateContext->DrawIndexed(objMeshData.IndexCount, 0, 0);
+
+
 
 	world = XMLoadFloat4x4(&_worldCamera3);
 	cb.mWorld = XMMatrixTranspose(world);
