@@ -18,17 +18,7 @@ public:
 
 	XMFLOAT4X4 Update();
 
-	//float GetxPosCar() { return xPosCar; }
-	//float GetyPosCar() { return yPosCar; }
-	//float GetzPosCar() { return zPosCar; }
-
-	float SetThirdPersonCamera(float x, float y, float z);
-
 	XMFLOAT4X4 ThirdPersonCamera();
-
-	//float GetxThirdPerson() { return xThirdPerson; }
-	//float GetyThirdPerson() { return yThirdPerson; }
-	//float GetzThirdPerson() { return zThirdPerson; }
 
 	void SetTargetPosition(float x, float y, float z);
 
@@ -41,14 +31,6 @@ private:
 	XMFLOAT4X4              _projection;
 	UINT _WindowHeight;
 	UINT _WindowWidth;
-
-	//float xPosCar;
-	//float yPosCar;
-	//float zPosCar;
-
-	float xThirdPerson;
-	float yThirdPerson;
-	float zThirdPerson;
 
 	bool thirdPerson;
 	bool firstPerson;

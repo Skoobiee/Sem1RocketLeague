@@ -32,7 +32,6 @@ struct ConstantBuffer //has to match in other constant buffer in .fx
 	XMFLOAT4 SpecularLight;
 	float SpecularPower;
 	XMFLOAT3 EyePosW; 	// Camera position in world space
-
 };
 
 class Application
@@ -164,20 +163,14 @@ private:
 	int timeOfNight;
 	bool daytime;
 
-	bool carMoved;
 	float carSpeed;
 	float xPosCar;
 	float yPosCar;
 	float zPosCar;
-	float xRotation;
-	bool carIsMoving;
+	//float xRotation;
 
 	float boost;
 	//float cooldown;
-
-	float xThirdPerson;
-	float yThirdPerson;
-	float zThirdPerson;
 
 	float yPosPowerup;
 	int counter;

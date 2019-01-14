@@ -171,13 +171,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	timeOfNight = 0;
 	daytime = true;
 
-	carMoved = false;
 	carSpeed = 2.0f;
 	xPosCar = 5.0f;
 	yPosCar = -700.0f;
 	zPosCar = -1.0f;
-	xRotation = 0;
-	carIsMoving = false;
+	//xRotation = 0;
 
 	yPosPowerup = -15.0f;
 	counter = 0;
@@ -1179,38 +1177,26 @@ void Application::Update()
 		if (GetAsyncKeyState('W')) //Set a bool to true for each, run a function to check for input
 		{
 			zPosCar = zPosCar + carSpeed;
-			//carSpeed += 0.02f;
-			//xThirdPerson += 10.0f;
-			carIsMoving = true;
 		}
 
 		if (GetAsyncKeyState('S'))
 		{
 			zPosCar = zPosCar - carSpeed;
-			//carSpeed += 0.05f;
-			//xThirdPerson += 0.05f;
-			carIsMoving = true;
 		}
 
 		if (GetAsyncKeyState('A'))
 		{
 			xPosCar = xPosCar - carSpeed;
 			//XMStoreFloat4x4(&_worldCar, XMMatrixRotationY(2));
-			//xRotation = xRotation - 0.01;
+			//xRotation -= 0.01;
 			//zThirdPerson += 0.02f;
-			carIsMoving = true;
 		}
 
 		if (GetAsyncKeyState('D'))
 		{
 			xPosCar = xPosCar + carSpeed;
-			//XMStoreFloat4x4(&_worldCar, XMMatrixRotationY(200));
-			//xRotation = xRotation + 0.01;
-			//zThirdPerson += 0.02f;
-			carIsMoving = true;
 		}
 		
-
 		_camera.SetTargetPosition(xPosCar, yPosCar, zPosCar);
 
 	/*XMMATRIX rotate = XMLoadFloat4x4(&_rotate);
@@ -1225,33 +1211,13 @@ void Application::Update()
 		//destroy pickup
 		//if boost < 75, add to boost (max 100) (25 each)
 
-	//if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
-	//{
-	//	if (GetAsyncKeyState('S'))
-	//	{
-	//		carSpeed = 3.0f;
-	//	}
-	//	else
-	//	{
-	//		carSpeed = 5.0f;
-	//		boost -= 0.5;
-	//		CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTextureCar);
-	//	}
-	//}
-	//else
-	//{
-	//	carSpeed = 2.0f;
-	//	//CreateDDSTextureFromFile(_pd3dDevice, L"ChainLink.dds", 0, &_pTextureCar);
-	//}
-
-		//boost += 0.1;
 
 	if (xPosCar > -4700.0f && xPosCar < -4000.0f && zPosCar > -400.0f && zPosCar < 300.0f
 		|| xPosCar > 4000.0f && xPosCar < 4700.0f && zPosCar > -400.0f && zPosCar < 300.0f
 		|| xPosCar < 4700.0f && xPosCar > 4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f
 		|| xPosCar > -4700.0f && xPosCar < -4000.0f && zPosCar < 5000.0f && zPosCar > 4000.0f)
 	{
-		//CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTexturePowerup);
+		CreateDDSTextureFromFile(_pd3dDevice, L"Crate_COLOR.dds", 0, &_pTexturePowerup);
 		boost += 0.2;
 	}
 	else if (GetAsyncKeyState(VK_SHIFT) && boost > 10)
@@ -1269,7 +1235,7 @@ void Application::Update()
 	else
 	{
 		carSpeed = 2.0f;
-		//CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
+		CreateDDSTextureFromFile(_pd3dDevice, L"Orange.dds", 0, &_pTexturePowerup);
 	}
 
 	//Car
@@ -1277,10 +1243,6 @@ void Application::Update()
 								XMMatrixTranslation(xPosCar, yPosCar, zPosCar) *
 							//	XMMatrixRotationY(xRotation) *
 								XMMatrixScaling(0.005f, 0.005f, 0.005f));
-
-	//Third Person Camera
-	/*XMStoreFloat4x4(&_worldCamera3, XMMatrixScaling(0.005f, 0.005f, 0.005f) *
-									XMMatrixTranslation(xPosCar, yPosCar, zPosCar));*/
 
 	//XMMATRIX rotationMatrix = XMMatrixRotationX;
 
@@ -1331,46 +1293,26 @@ void Application::Update()
 
 	if (timeOfDay >= 1600 && timeOfDay <= 2799 || timeOfNight >= 3200 && timeOfNight <= 4799) //800, 1399,  1600, 2399
 	{
-		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.7f, 0.7f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
-		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 
 	if (timeOfDay >= 3200 && timeOfDay <= 4799 || timeOfNight >= 1600 && timeOfNight <= 2799) //1600, 2399,   800, 1399
 	{
-		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.4f, 0.4f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
-		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 
 	if (timeOfDay >= 4800) //2400
 	{
 		daytime = false;
 
-		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(0.1f, 0.1f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
-		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 	
 	if (timeOfNight >= 4800) //2400
 	{
 		daytime = true;
 
-		lightDirection = XMFLOAT3(0.25f, 0.5f, -1.0f);
 		diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		diffuseLight = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-		ambientMaterial = XMFLOAT4(0.2f, 0.7f, 1.0f, 0.2f);
-		ambientLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	}
 
 	//m_spriteBatch->Begin();

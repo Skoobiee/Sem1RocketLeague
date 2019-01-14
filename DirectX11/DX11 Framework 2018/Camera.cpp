@@ -1,6 +1,5 @@
 #include "Camera.h"
 
-
 Camera::Camera()
 {
 	// Initialize the view matrix
@@ -15,19 +14,6 @@ Camera::Camera()
 
 	// Initialize the projection matrix
 	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(XM_PIDIV2, _WindowWidth / (FLOAT)_WindowHeight, 0.01f, 100.0f)); //changes the near clipping and far clipping plane, increase to increase view space
-	
-	/*xThirdPerson = 0.0f;
-	yThirdPerson = 1.0f;
-	zThirdPerson = -6.5f;*/
-
-
-	//TrackingOffset.x = -5.0f;
-	//TrackingOffset.y = 701.0f;
-	//TrackingOffset.z = -6.0f;
-
-	//TargetPosition.x = 2.0f;
-	//TargetPosition.y = -2.0f;
-	//TargetPosition.z = -5.0f;
 
 	TrackingOffset.x = -5.0f;
 	TrackingOffset.y = 701.0f;
@@ -36,10 +22,6 @@ Camera::Camera()
 	TargetPosition.x = 5.0f;
 	TargetPosition.y = -700.0f;
 	TargetPosition.z = -1.0f;
-
-	xThirdPerson = TrackingOffset.x + TargetPosition.x;
-	yThirdPerson = TrackingOffset.y + TargetPosition.y;
-	zThirdPerson = TrackingOffset.z + TargetPosition.z;
 
 	thirdPerson = false;
 	firstPerson = false;
@@ -74,15 +56,15 @@ XMFLOAT4X4 Camera::Update()
 
 		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
-	else if (GetAsyncKeyState('3')) //first person
+	else if (GetAsyncKeyState('3')) //third person
+	{
+		thirdPerson = true;
+		firstPerson = false;
+	}
+	else if (GetAsyncKeyState('4')) //first person
 	{
 		thirdPerson = false;
 		firstPerson = true;
-	}
-	else if (GetAsyncKeyState('4')) //third person
-	{	
-		thirdPerson = true;
-		firstPerson = false;
 	}
 	
 	if (thirdPerson || firstPerson)
@@ -95,25 +77,30 @@ XMFLOAT4X4 Camera::Update()
 
 XMFLOAT4X4 Camera::ThirdPersonCamera()
 {
-	TargetPosition.x *= 0.005;
-	TargetPosition.y *= 0.005;
-	TargetPosition.z *= 0.005;
-	TrackingOffset.x *= 0.005;
-	TrackingOffset.y = 700* 0.005;
-	TrackingOffset.z *= 0.005;
-
-	if (thirdPerson)
+	if (firstPerson)
 	{
+		TargetPosition.x *= 0.005;
+		TargetPosition.y *= 0.005;
+		TargetPosition.z *= 0.005;
+		TrackingOffset.x *= 0.005;
+		TrackingOffset.y = 700 * 0.005;
+		TrackingOffset.z *= 0.005;
 		XMVECTOR Eye = XMVectorSet(TargetPosition.x + TrackingOffset.x, TargetPosition.y + TrackingOffset.y, TargetPosition.z + TrackingOffset.z, 0.0f);
 		XMVECTOR At = XMVectorSet(TargetPosition.x, 0.0f, 50.0f, 0.0f);
 		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 	}
-	else if (firstPerson)
+	if (thirdPerson)
 	{
+		TargetPosition.x *= 0.005;
+		TargetPosition.y *= 0.005;
+		TargetPosition.z *= 0.005;
+		TrackingOffset.x *= -0.9;
+		TrackingOffset.y = 700 * 0.01;
+		TrackingOffset.z *= 1.0;
 		XMVECTOR Eye = XMVectorSet(TargetPosition.x + TrackingOffset.x, TargetPosition.y + TrackingOffset.y, TargetPosition.z + TrackingOffset.z, 0.0f);
-		XMVECTOR At = XMVectorSet(TargetPosition.x, 0.0f, 50.0f, 0.0f);
+		XMVECTOR At = XMVectorSet(TargetPosition.x, -7.0f, 50.0f, 0.0f);
 		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 		XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
